@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="survey.shakya.sugan.surveyapp">
+
+    <!-- To access Google+ APIs: -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:name="android.support.multidex.MultiDexApplication"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ListSurveyActivity"
+            android:label="@string/title_activity_list_survey"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ListQuestionForSurveyerActivity"
+            android:exported="true"
+            android:label="@string/title_activity_list_question_for_surveyer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ListQuestionForSurveyeeActivity"
+            android:exported="true"
+            android:label="@string/title_activity_list_question_for_surveyee"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ListResponseBySurveyActivity"
+            android:exported="true"
+            android:label="@string/title_activity_list_response_by_survey"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ListResponseByQuestionActivity"
+            android:exported="true"
+            android:label="@string/title_activity_list_response_by_question"
+            android:theme="@style/AppTheme.NoActionBar" />
+    </application>
+
+</manifest>
