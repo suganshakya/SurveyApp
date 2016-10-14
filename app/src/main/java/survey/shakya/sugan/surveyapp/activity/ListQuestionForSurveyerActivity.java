@@ -9,16 +9,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import survey.shakya.sugan.surveyapp.R;
-import survey.shakya.sugan.surveyapp.adapter.QuestionAdapterForSurveyee;
 import survey.shakya.sugan.surveyapp.adapter.QuestionAdapterForSurveyer;
 import survey.shakya.sugan.surveyapp.dialogs.QuestionFragment;
-import survey.shakya.sugan.surveyapp.model.Question;
-import survey.shakya.sugan.surveyapp.model.Survey;
 
 public class ListQuestionForSurveyerActivity extends AppCompatActivity {
     private static String TAG = ListQuestionForSurveyerActivity.class.getName();

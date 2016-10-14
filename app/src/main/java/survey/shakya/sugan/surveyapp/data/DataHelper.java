@@ -12,9 +12,7 @@ import java.util.List;
 import android.util.Log;
 
 import survey.shakya.sugan.surveyapp.model.Question;
-import survey.shakya.sugan.surveyapp.model.Response;
 import survey.shakya.sugan.surveyapp.model.Survey;
-import survey.shakya.sugan.surveyapp.model.Surveyee;
 import survey.shakya.sugan.surveyapp.model.Surveyer;
 
 public class DataHelper extends SQLiteOpenHelper {
