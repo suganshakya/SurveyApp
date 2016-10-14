@@ -51,11 +51,15 @@ public class ListSurveyActivity extends AppCompatActivity {
                 showCreateSurveyDialog();
             }
         });
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
         final SurveyAdapter surveyAdapter = new SurveyAdapter(getApplicationContext(), surveyerId);
         if (surveyAdapter == null) {
-            Toast.makeText(getApplicationContext(), "No Survey Found for userId - " + surveyerId, Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "No Survey Found for userId - " + surveyerId, Toast.LENGTH_SHORT).show();
+            return;
         } else {
             ListView listView = (ListView) findViewById(R.id.list_view_survey);
             listView.setAdapter(surveyAdapter);
@@ -83,8 +87,9 @@ public class ListSurveyActivity extends AppCompatActivity {
     }
 
     public void listQuestion(int surveyId) {
-        Intent intent = new Intent(this, ListQuestionForSurveyerActivity.class);
+        Intent intent = new Intent(ListSurveyActivity.this, ListQuestionForSurveyerActivity.class);
         intent.putExtra("SURVEY_ID", surveyId);
-        startActivity(intent);
+        finish();
+        ListSurveyActivity.this.startActivity(intent);
     }
 }

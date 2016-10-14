@@ -42,7 +42,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 SurveyData.SURVEYER_COL_USERNAME + " TEXT NOT NULL, " +
                 SurveyData.SURVEYER_COL_FIRSTNAME + " TEXT, " +
                 SurveyData.SURVEYER_COL_LASTNAME + " TEXT, " +
-                SurveyData.SURVEYER_COL_PASSWORD + " TEXT NOT NULL )");
+                SurveyData.SURVEYER_COL_PASSWORD + " TEXT NOT NULL)");
 
         db.execSQL("CREATE TABLE " + SurveyData.SURVEYEE_TABLE + " ( " +
                 SurveyData.SURVEYEE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -331,8 +331,8 @@ public class DataHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         Cursor cursor = db.rawQuery("UPDATE " + SurveyData.QUESTION_TABLE + " SET " +
                         SurveyData.QUESTION_COL_QUESTION + " = ?, " +
-                        SurveyData.QUESTION_COL_TYPE + " = ? " +
-                        SurveyData.QUESTION_COL_OPTIONS + " = ? " +
+                        SurveyData.QUESTION_COL_TYPE + " = ?, " +
+                        SurveyData.QUESTION_COL_OPTIONS + " = ?, " +
                         SurveyData.QUESTION_COL_SURVEY + " = ? " +
                         "WHERE " + SurveyData.QUESTION_COL_ID + " = ?",
                 new String[]{question.getQuestion(), question.getType(),

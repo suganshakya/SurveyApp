@@ -1,9 +1,10 @@
 package survey.shakya.sugan.surveyapp.dialogs;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import survey.shakya.sugan.surveyapp.R;
+import survey.shakya.sugan.surveyapp.activity.ListSurveyActivity;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
 import survey.shakya.sugan.surveyapp.model.Survey;
 
 public class SurveyFragment extends DialogFragment {
+    private static String TAG = SurveyFragment.class.getName();
+
+
     private static final String ARG_SURVEYER_ID = "surveyerId";
 
     private int surveyerId;
@@ -68,17 +73,29 @@ public class SurveyFragment extends DialogFragment {
                     Toast.makeText(getContext(), "Enter valid survey Name.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                DataHelper dataHelper = DataHelper.getInstance(getContext());
-                Survey survey = new Survey(surveyName, surveyerId);
-                long result = dataHelper.insertSurvey(survey);
-                if(result == -1){
-                    Toast.makeText(getContext(), "Error inserting a new Survey", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Success! Inserting a new Survey", Toast.LENGTH_SHORT).show();
-                    dismiss();
-                }
+                insertSurvey(surveyName);
             }
         });
         return view;
+    }
+
+    public void insertSurvey(String surveyName){
+
+        DataHelper dataHelper = DataHelper.getInstance(getContext());
+        Survey survey = new Survey(surveyName, surveyerId);
+        long result = dataHelper.insertSurvey(survey);
+        if(result == -1){
+            Toast.makeText(getContext(), "Error inserting a new Survey", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Success! Inserting a new Survey", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), ListSurveyActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void dismiss() {
+        Log.i(TAG, "SurveyFragment Dismissed.");
+        super.dismiss();
     }
 }

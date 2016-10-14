@@ -39,17 +39,17 @@ public class ListQuestionForSurveyerActivity extends AppCompatActivity {
             return;
         }
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showCreateQuestionDialog();
-//            }
-//        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCreateQuestionDialog();
+            }
+        });
 
         QuestionAdapterForSurveyer questionAdapter = new QuestionAdapterForSurveyer(getApplicationContext(), surveyId);
         if (questionAdapter == null) {
-            Toast.makeText(getApplicationContext(), "No Question Found for survey - " + surveyId, Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "No Question Found for survey - " + surveyId, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -57,16 +57,15 @@ public class ListQuestionForSurveyerActivity extends AppCompatActivity {
         listView.setAdapter(questionAdapter);
     }
 
-//    public void showCreateQuestionDialog() {
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        Fragment prev = getSupportFragmentManager().findFragmentByTag("QuestionDialogFragment");
-//        if (prev != null) {
-//            ft.remove(prev);
-//        }
-//        ft.addToBackStack(null);
-//
-//        DialogFragment questionFragment = QuestionFragment.newInstance(surveyId);
-//        questionFragment.show(ft, "QuestionDialogFragment");
-//    }
+    public void showCreateQuestionDialog() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("QuestionDialogFragment");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
 
+        DialogFragment questionFragment = QuestionFragment.newInstance(surveyId);
+        questionFragment.show(ft, "QuestionDialogFragment");
+    }
 }

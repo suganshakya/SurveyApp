@@ -31,6 +31,7 @@ public class QuestionAdapterForSurveyer extends BaseAdapter {
         this.context = context;
         DataHelper helper = DataHelper.getInstance(this.context);
         questionList = helper.getQuestionList(surveyId);
+        Toast.makeText(context, "QuestionAdapter -" + surveyId, Toast.LENGTH_LONG).show();
     }
 
     @Override

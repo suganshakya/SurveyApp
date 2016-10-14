@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import survey.shakya.sugan.surveyapp.activity.ListQuestionForSurveyerActivity;
 import survey.shakya.sugan.surveyapp.activity.ListSurveyActivity;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
 import survey.shakya.sugan.surveyapp.model.Surveyer;
@@ -99,16 +100,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void signIn(View view) {
         username = usernameET.getText().toString();
+        if(username.contentEquals("") || username == null){
+            Toast.makeText(getApplicationContext(), "Enter username.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         password = passwordET.getText().toString();
+        if(password.contentEquals("") || password == null){
+            Toast.makeText(getApplicationContext(), "Enter password.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         DataHelper dataHelper = DataHelper.getInstance(getApplicationContext());
         Surveyer surveyer = dataHelper.getSurveyer(username);
         if (surveyer == null) {
             Toast.makeText(getApplicationContext(), "User: " + username + " not found in Database", Toast.LENGTH_SHORT).show();
         } else if (surveyer.getPassword().contentEquals(password)) {
             Log.i(TAG, "Login Success");
-            Intent intent = new Intent(this, ListSurveyActivity.class);
+            Intent intent = new Intent(MainActivity.this, ListSurveyActivity.class);
             intent.putExtra("SURVEYER_ID", surveyer.getId());
-            startActivity(intent);
+            MainActivity.this.startActivity(intent);
         } else {
             Toast.makeText(getApplicationContext(), "Password did not match", Toast.LENGTH_SHORT).show();
         }
