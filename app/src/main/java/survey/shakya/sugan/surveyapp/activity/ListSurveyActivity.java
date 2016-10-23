@@ -89,7 +89,6 @@ public class ListSurveyActivity extends AppCompatActivity {
     public void listQuestion(int surveyId) {
         Intent intent = new Intent(ListSurveyActivity.this, ListQuestionForSurveyerActivity.class);
         intent.putExtra("SURVEY_ID", surveyId);
-        finish();
         ListSurveyActivity.this.startActivity(intent);
     }
 }

@@ -29,8 +29,8 @@ public class ListQuestionForSurveyeeActivity extends AppCompatActivity {
             }
         });
 
-        int surveeId = savedInstanceState.getInt("surveeId");
-        QuestionAdapterForSurveyee questionAdapter = new QuestionAdapterForSurveyee(getApplicationContext(), surveeId);
+        int surveyeeId = savedInstanceState.getInt("surveyeeId");
+        QuestionAdapterForSurveyee questionAdapter = new QuestionAdapterForSurveyee(getApplicationContext(), surveyeeId);
         ListView listView = (ListView) findViewById(R.id.list_view_question_for_surveyee);
         listView.setAdapter(questionAdapter);
     }

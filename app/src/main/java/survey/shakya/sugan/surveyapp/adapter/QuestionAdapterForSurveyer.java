@@ -71,7 +71,7 @@ public class QuestionAdapterForSurveyer extends BaseAdapter {
             view = layoutInflater.inflate(R.layout.view_question_layout_for_surveyer, parent, false);
 
             TextView questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
-            questionIdTextView.setText(question.getId());
+            questionIdTextView.setText(""+question.getId());
 
             TextView questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
             questionQuestionTextView.setText(question.getQuestion());
@@ -83,7 +83,7 @@ public class QuestionAdapterForSurveyer extends BaseAdapter {
             questionOptionsTextView.setText(question.getOptions());
 
             TextView questionSurveyTextView = (TextView) view.findViewById(R.id.text_view_question_survey_for_surveyer);
-            questionSurveyTextView.setText(question.getSurveyId());
+            questionSurveyTextView.setText("" + question.getSurveyId());
         }
         return view;
     }
