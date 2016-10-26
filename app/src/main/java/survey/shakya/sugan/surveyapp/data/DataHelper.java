@@ -143,6 +143,23 @@ public class DataHelper extends SQLiteOpenHelper {
         return surveyList;
     }
 
+    public Question getQuestion(int questionId) {
+        Question question = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.QUESTION_TABLE + " WHERE " +
+                SurveyData.QUESTION_COL_ID + " = ?", new String[]{""+questionId});
+        if (cursor.moveToFirst()) {
+            question = new Question();
+            question.setId(questionId);
+            question.setQuestion(cursor.getString(cursor.getColumnIndexOrThrow(SurveyData.QUESTION_COL_QUESTION)));
+            question.setType(cursor.getString(cursor.getColumnIndexOrThrow(SurveyData.QUESTION_COL_TYPE)));
+            question.setOptions(cursor.getString(cursor.getColumnIndexOrThrow(SurveyData.QUESTION_COL_OPTIONS)));
+            question.setSurveyId(cursor.getInt(cursor.getColumnIndexOrThrow(SurveyData.QUESTION_COL_SURVEY)));
+        }
+        cursor.close();
+        return question;
+    }
+
     public List<Question> getQuestionList(int surveyId) {
         List<Question> questionList = null;
         SQLiteDatabase db = getReadableDatabase();

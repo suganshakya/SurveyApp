@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -17,6 +18,8 @@ import survey.shakya.sugan.surveyapp.R;
 import survey.shakya.sugan.surveyapp.adapter.QuestionAdapterForSurveyee;
 import survey.shakya.sugan.surveyapp.adapter.QuestionAdapterForSurveyer;
 import survey.shakya.sugan.surveyapp.dialogs.QuestionFragment;
+import survey.shakya.sugan.surveyapp.dialogs.SurveyFragment;
+import survey.shakya.sugan.surveyapp.dialogs.UpdateQuestionFragment;
 import survey.shakya.sugan.surveyapp.model.Question;
 import survey.shakya.sugan.surveyapp.model.Survey;
 
@@ -47,7 +50,7 @@ public class ListQuestionForSurveyerActivity extends AppCompatActivity {
             }
         });
 
-        QuestionAdapterForSurveyer questionAdapter = new QuestionAdapterForSurveyer(getApplicationContext(), surveyId);
+        final QuestionAdapterForSurveyer questionAdapter = new QuestionAdapterForSurveyer(getApplicationContext(), surveyId);
         if (questionAdapter == null) {
             Toast.makeText(getApplicationContext(), "No Question Found for survey - " + surveyId, Toast.LENGTH_SHORT).show();
             return;
@@ -55,6 +58,19 @@ public class ListQuestionForSurveyerActivity extends AppCompatActivity {
 
         ListView listView = (ListView) findViewById(R.id.list_view_question_for_surveyer);
         listView.setAdapter(questionAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(TAG, "Item " + position +" Selected");
+                Question question = (Question) questionAdapter.getItem(position);
+                showUpdateQuestionDialog(question.getId());
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     public void showCreateQuestionDialog() {
@@ -67,5 +83,17 @@ public class ListQuestionForSurveyerActivity extends AppCompatActivity {
 
         DialogFragment questionFragment = QuestionFragment.newInstance(surveyId);
         questionFragment.show(ft, "QuestionDialogFragment");
+    }
+
+    public void showUpdateQuestionDialog(int questionId){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("UpdateQuestionDialogFragment");
+        if(prev != null){
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        DialogFragment surveyFragment = UpdateQuestionFragment.newInstance(questionId);
+        surveyFragment.show(ft, "UpdateQuestionDialogFragment");
     }
 }

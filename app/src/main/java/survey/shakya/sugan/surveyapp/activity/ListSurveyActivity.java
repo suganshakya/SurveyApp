@@ -51,11 +51,9 @@ public class ListSurveyActivity extends AppCompatActivity {
                 showCreateSurveyDialog();
             }
         });
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+
+
         final SurveyAdapter surveyAdapter = new SurveyAdapter(getApplicationContext(), surveyerId);
         if (surveyAdapter == null) {
             Toast.makeText(getApplicationContext(), "No Survey Found for userId - " + surveyerId, Toast.LENGTH_SHORT).show();
