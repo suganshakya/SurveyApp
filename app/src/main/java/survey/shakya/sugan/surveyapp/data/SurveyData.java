@@ -23,6 +23,7 @@ public class SurveyData {
     public static final String SURVEYEE_COL_ID = "id";
     public static final String SURVEYEE_COL_FIRSTNAME = "firstname";
     public static final String SURVEYEE_COL_LASTNAME = "lastname";
+    public static final String SURVEYEE_COL_USERNAME = "username";
 
     public static final String SURVEY_COL_ID = "id";
     public static final String SURVEY_COL_NAME = "name";
@@ -38,5 +39,4 @@ public class SurveyData {
     public static final String RESPONSE_COL_SURVEYEE = "surveyee";
     public static final String RESPONSE_COL_QUESTION = "question";
     public static final String RESPONSE_COL_RESPONSE = "response";
-
 }

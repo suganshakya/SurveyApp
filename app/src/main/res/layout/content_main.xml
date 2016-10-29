@@ -22,6 +22,88 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/vertical_gap"
+                android:text="Fill up a survey"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/textColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="First Name: "
+                    android:textColor="@color/textColor" />
+
+                <EditText
+                    android:id="@+id/edit_text_first_name_surveyee"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Last Name :"
+                    android:textColor="@color/textColor" />
+
+                <EditText
+                    android:id="@+id/edit_text_last_name_surveyee"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Username :"
+                    android:textColor="@color/textColor" />
+
+                <EditText
+                    android:id="@+id/edit_text_username_surveyee"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:hint="Must be unique"
+                    />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/fill_up_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="Fill up"
+                android:textColor="@color/darkGreen"
+                android:textStyle="bold"
+                android:onClick="fillUp"
+                />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -99,65 +181,6 @@
                     android:onClick="register"
                     />
             </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/vertical_gap"
-                android:text="Fill up a survey"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:textColor="@color/textColor" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="First Name: "
-                    android:textColor="@color/textColor" />
-
-                <EditText
-                    android:id="@+id/edit_text_first_name_surveyee"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Last Name :"
-                    android:textColor="@color/textColor" />
-
-                <EditText
-                    android:id="@+id/edit_text_last_name_surveyee"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/fill_up_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:text="Fill up"
-                android:textColor="@color/darkGreen"
-                android:textStyle="bold"
-                android:onClick="fillUp"
-                />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

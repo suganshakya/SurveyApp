@@ -87,9 +87,7 @@ public class SurveyFragment extends DialogFragment {
         if(result == -1){
             Toast.makeText(getContext(), "Error inserting a new Survey", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getContext(), "Success! Inserting a new Survey", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(), ListSurveyActivity.class);
-            startActivity(intent);
+            dismiss();
         }
     }
 

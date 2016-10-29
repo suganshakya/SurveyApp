@@ -15,23 +15,30 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.credentials.PasswordSpecification;
+
 import java.util.List;
 
 import survey.shakya.sugan.surveyapp.activity.ListQuestionForSurveyerActivity;
 import survey.shakya.sugan.surveyapp.activity.ListSurveyActivity;
+import survey.shakya.sugan.surveyapp.activity.ListSurveyActivityForSurveyee;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
 import survey.shakya.sugan.surveyapp.model.Question;
+import survey.shakya.sugan.surveyapp.model.Surveyee;
 import survey.shakya.sugan.surveyapp.model.Surveyer;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = MainActivity.class.getName();
     Context context = null;
 
-    EditText usernameET, passwordET, firstNameET, lastNameET;
+    EditText usernameET, passwordET;    // For Surveyer
+    EditText firstNameET, lastNameET, username1ET;  // For Surveyee
     Button signInButton, registerButton, fillUpButton;
 
     String username, password;
-    String firstName, lastName;
+    String firstName, lastName, username1;
+
+//    DataHelper dataHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById();
         context = getApplicationContext();
+//        DataHelper dataHelper = DataHelper.getInstance(context);
     }
 
     private void findViewById() {
@@ -59,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         firstNameET = (EditText) findViewById(R.id.edit_text_first_name_surveyee);
         lastNameET = (EditText) findViewById(R.id.edit_text_last_name_surveyee);
+        username1ET = (EditText) findViewById(R.id.edit_text_username_surveyee);
 
         signInButton = (Button) findViewById(R.id.sign_in_button);
         registerButton = (Button) findViewById(R.id.register_button);
@@ -130,6 +139,24 @@ public class MainActivity extends AppCompatActivity {
     public void fillUp(View view) {
         firstName = firstNameET.getText().toString();
         lastName = lastNameET.getText().toString();
-        // TODO
+        username1 = username1ET.getText().toString();
+        if(username1.contentEquals("") || username1 == null){
+            Toast.makeText(getApplicationContext(), "Enter username.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        DataHelper dataHelper = DataHelper.getInstance(getApplicationContext());
+        Surveyee surveyee = dataHelper.getSurveyee(username1);
+        if (surveyee != null) {
+            Toast.makeText(context, "User '" + username1 + "' already exists!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        surveyee = new Surveyee(firstName, lastName, username1);
+        dataHelper.insertSurveyee(surveyee);
+//        dataHelper = DataHelper.getInstance(getApplicationContext());
+        surveyee = dataHelper.getSurveyee(username1);
+        Intent intent = new Intent(MainActivity.this, ListSurveyActivityForSurveyee.class);
+        intent.putExtra("SURVEYEE_ID", surveyee.getId());
+        MainActivity.this.startActivity(intent);
     }
 }

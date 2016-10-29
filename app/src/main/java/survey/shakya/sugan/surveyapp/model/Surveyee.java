@@ -8,6 +8,7 @@ public class Surveyee {
     int id;
     String firstName;
     String lastName;
+    String username;
 
     public Surveyee() {
     }
@@ -17,6 +18,13 @@ public class Surveyee {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    public Surveyee(String firstName, String lastName, String username) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+    }
+
 
     public int getId() {
         return id;
@@ -42,4 +50,11 @@ public class Surveyee {
         this.lastName = lastName;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

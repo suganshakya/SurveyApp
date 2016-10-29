@@ -27,7 +27,6 @@ public class ListQuestionForSurveyerActivity extends AppCompatActivity {
     private static String TAG = ListQuestionForSurveyerActivity.class.getName();
 
     int surveyId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

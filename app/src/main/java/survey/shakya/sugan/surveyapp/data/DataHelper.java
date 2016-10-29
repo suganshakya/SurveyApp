@@ -39,7 +39,7 @@ public class DataHelper extends SQLiteOpenHelper {
         // Create
         db.execSQL("CREATE TABLE " + SurveyData.SURVEYER_TABLE + " ( " +
                 SurveyData.SURVEYER_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                SurveyData.SURVEYER_COL_USERNAME + " TEXT NOT NULL, " +
+                SurveyData.SURVEYER_COL_USERNAME + " TEXT NOT NULL UNIQUE, " +
                 SurveyData.SURVEYER_COL_FIRSTNAME + " TEXT, " +
                 SurveyData.SURVEYER_COL_LASTNAME + " TEXT, " +
                 SurveyData.SURVEYER_COL_PASSWORD + " TEXT NOT NULL)");
@@ -47,11 +47,12 @@ public class DataHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + SurveyData.SURVEYEE_TABLE + " ( " +
                 SurveyData.SURVEYEE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 SurveyData.SURVEYEE_COL_FIRSTNAME + " TEXT NOT NULL, " +
-                SurveyData.SURVEYER_COL_LASTNAME + " TEXT NOT NULL)");
+                SurveyData.SURVEYEE_COL_LASTNAME + " TEXT NOT NULL, " +
+                SurveyData.SURVEYEE_COL_USERNAME + " TEXT NOT NULL)");
 
         db.execSQL("CREATE TABLE " + SurveyData.SURVEY_TABLE + " ( " +
                 SurveyData.SURVEY_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                SurveyData.SURVEY_COL_NAME + " TEXT NOT NULL, " +
+                SurveyData.SURVEY_COL_NAME + " TEXT NOT NULL UNIQUE, " +
                 SurveyData.SURVEY_COL_SURVEYER + " INTEGER, " +
                 " FOREIGN KEY (" + SurveyData.SURVEY_COL_SURVEYER + ") REFERENCES " + SurveyData.SURVEYER_TABLE + "(" + SurveyData.SURVEYER_COL_ID + "))");
 
@@ -109,15 +110,16 @@ public class DataHelper extends SQLiteOpenHelper {
     }
 
     // SURVEYEE
-    public Surveyee getSurveyee(String firstName) {
+    public Surveyee getSurveyee(String username) {
         Surveyee surveyee = null;
-        surveyee.setFirstName(firstName);
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.SURVEYEE_TABLE + " WHERE " +
-                SurveyData.SURVEYEE_COL_FIRSTNAME + " = ?", new String[]{firstName});
+                SurveyData.SURVEYEE_COL_USERNAME + " = ?", new String[]{username});
         if (cursor.moveToFirst()) {
             surveyee = new Surveyee();
+            surveyee.setUsername(username);
             surveyee.setId(cursor.getInt(cursor.getColumnIndex(SurveyData.SURVEYEE_COL_ID)));
+            surveyee.setFirstName(cursor.getString(cursor.getColumnIndex(SurveyData.SURVEYEE_COL_FIRSTNAME)));
             surveyee.setLastName(cursor.getString(cursor.getColumnIndex(SurveyData.SURVEYEE_COL_LASTNAME)));
         }
         cursor.close();
@@ -142,6 +144,27 @@ public class DataHelper extends SQLiteOpenHelper {
         cursor.close();
         return surveyList;
     }
+
+    public List<Survey> getAllSurveys() {
+        List<Survey> surveyList = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.SURVEY_TABLE, null);
+        if (cursor.moveToFirst()) {
+            surveyList = new ArrayList<>();
+            do {
+                Survey survey = new Survey();
+                survey.setId(cursor.getInt(cursor.getColumnIndex(SurveyData.SURVEY_COL_ID)));
+                survey.setName(cursor.getString(cursor.getColumnIndex(SurveyData.SURVEY_COL_NAME)));
+                survey.setSurveyerId(cursor.getInt(cursor.getColumnIndex(SurveyData.SURVEY_COL_SURVEYER)));
+                surveyList.add(survey);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return surveyList;
+    }
+
+
+
 
     public Question getQuestion(int questionId) {
         Question question = null;
@@ -254,6 +277,7 @@ public class DataHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SurveyData.SURVEYEE_COL_FIRSTNAME, surveyee.getFirstName());
         contentValues.put(SurveyData.SURVEYEE_COL_LASTNAME, surveyee.getLastName());
+        contentValues.put(SurveyData.SURVEYEE_COL_USERNAME, surveyee.getUsername());
         long value = db.insertOrThrow(SurveyData.SURVEYEE_TABLE, null, contentValues);
         db.setTransactionSuccessful();
         db.endTransaction();
@@ -322,9 +346,10 @@ public class DataHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         Cursor cursor = db.rawQuery("UPDATE " + SurveyData.SURVEYEE_TABLE + " SET " +
                         SurveyData.SURVEYEE_COL_FIRSTNAME + " = ?, " +
-                        SurveyData.SURVEYEE_COL_LASTNAME + " = ? WHERE " +
+                        SurveyData.SURVEYEE_COL_LASTNAME + " = ?, " +
+                        SurveyData.SURVEYEE_COL_USERNAME + " = ? WHERE " +
                         SurveyData.SURVEYEE_COL_ID + " = ?",
-                new String[]{surveyee.getFirstName(), surveyee.getLastName(), "" + id});
+                new String[]{surveyee.getFirstName(), surveyee.getLastName(), surveyee.getUsername(), "" + id});
         int count = cursor.getCount();
         cursor.close();
         return count;

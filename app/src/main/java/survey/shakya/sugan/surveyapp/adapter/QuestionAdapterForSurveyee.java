@@ -26,22 +26,23 @@ import survey.shakya.sugan.surveyapp.model.Survey;
  */
 
 public class QuestionAdapterForSurveyee extends BaseAdapter {
-    private static final int TYPE_COUNT = 1;
+    private static final int TYPE_COUNT = 4;
 
     private Context context;
     List<Question> questionList = new ArrayList<>();
     private int surveyId;
+    private int surveyeeId;
 
-    public QuestionAdapterForSurveyee(Context context, int surveyId) {
+    public QuestionAdapterForSurveyee(Context context, int surveyeeId, int surveyId) {
         this.context = context;
         this.surveyId = surveyId;
+        this.surveyeeId = surveyeeId;
         DataHelper helper = DataHelper.getInstance(this.context);
         questionList = helper.getQuestionList(surveyId);
     }
 
     @Override
     public int getCount() {
-
         if (questionList == null)
             return 0;
         return questionList.size();
@@ -83,7 +84,7 @@ public class QuestionAdapterForSurveyee extends BaseAdapter {
                 case Question.FILL_IN_BLANK:
                     view = layoutInflater.inflate(R.layout.view_question_text_layout_for_surveyee, parent, false);
                     questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
-                    questionIdTextView.setText(question.getId());
+                    questionIdTextView.setText("" + question.getId());
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
                     questionQuestionTextView.setText(question.getQuestion());
 
@@ -91,17 +92,18 @@ public class QuestionAdapterForSurveyee extends BaseAdapter {
                     break;
 
                 case Question.TRUE_FALSE:
-                    view = layoutInflater.inflate(R.layout.view_question_text_layout_for_surveyee, parent, false);
+                    view = layoutInflater.inflate(R.layout.view_question_true_false_layout_for_surveyee, parent, false);
+
                     questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
-                    questionIdTextView.setText(question.getId());
+                    questionIdTextView.setText("" + question.getId());
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
                     questionQuestionTextView.setText(question.getQuestion());
 
-                    RadioGroup trueFalseGroup = (RadioGroup) view.findViewById(R.id.radio_group_view_question_surveyee);
+                    RadioGroup trueFalseGroup = (RadioGroup) view.findViewById(R.id.true_false_group_question_for_surveyee);
                     String[] options = new String[]{"True", "False"};
                     RadioButton rb[] = new RadioButton[options.length];
-                    rb[0] = (RadioButton) view.findViewById(R.id.true_false_button0);
-                    rb[1] = (RadioButton) view.findViewById(R.id.true_false_button1);
+                    rb[0] = (RadioButton) view.findViewById(R.id.true_button);
+                    rb[1] = (RadioButton) view.findViewById(R.id.false_button);
 
                     for (int i = 0; i < options.length; ++i) {
                         rb[i].setText(options[i]);
@@ -109,9 +111,9 @@ public class QuestionAdapterForSurveyee extends BaseAdapter {
                     break;
 
                 case Question.SPINNER:
-                    view = layoutInflater.inflate(R.layout.view_question_text_layout_for_surveyee, parent, false);
+                    view = layoutInflater.inflate(R.layout.view_question_spinner_layout_for_surveyee, parent, false);
                     questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
-                    questionIdTextView.setText(question.getId());
+                    questionIdTextView.setText("" + question.getId());
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
                     questionQuestionTextView.setText(question.getQuestion());
 
@@ -128,9 +130,9 @@ public class QuestionAdapterForSurveyee extends BaseAdapter {
                     break;
 
                 case Question.RADIO:
-                    view = layoutInflater.inflate(R.layout.view_question_text_layout_for_surveyee, parent, false);
+                    view = layoutInflater.inflate(R.layout.view_question_radio_layout_for_surveyee, parent, false);
                     questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
-                    questionIdTextView.setText(question.getId());
+                    questionIdTextView.setText(""+ question.getId());
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
                     questionQuestionTextView.setText(question.getQuestion());
 

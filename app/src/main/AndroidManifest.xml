@@ -28,6 +28,12 @@
             android:label="@string/title_activity_list_survey"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".activity.ListSurveyActivityForSurveyee"
+            android:exported="true"
+            android:label="@string/title_activity_list_survey_for_surveyee"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <activity
             android:name=".activity.ListQuestionForSurveyerActivity"
