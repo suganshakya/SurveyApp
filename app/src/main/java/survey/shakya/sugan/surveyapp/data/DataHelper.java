@@ -14,14 +14,11 @@ import android.util.Log;
 import survey.shakya.sugan.surveyapp.model.Question;
 import survey.shakya.sugan.surveyapp.model.Response;
 import survey.shakya.sugan.surveyapp.model.Survey;
-import survey.shakya.sugan.surveyapp.model.Surveyee;
-import survey.shakya.sugan.surveyapp.model.Surveyer;
+import survey.shakya.sugan.surveyapp.model.User;
 
 public class DataHelper extends SQLiteOpenHelper {
     private static DataHelper instance;
     private static String TAG = DataHelper.class.getName();
-
-    private static final String COMMA = ", ";
 
     private DataHelper(Context context) {
         super(context, SurveyData.DATABASE, null, SurveyData.DATABASE_VERSION);
@@ -37,24 +34,19 @@ public class DataHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create
-        db.execSQL("CREATE TABLE " + SurveyData.SURVEYER_TABLE + " ( " +
-                SurveyData.SURVEYER_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                SurveyData.SURVEYER_COL_USERNAME + " TEXT NOT NULL UNIQUE, " +
-                SurveyData.SURVEYER_COL_FIRSTNAME + " TEXT, " +
-                SurveyData.SURVEYER_COL_LASTNAME + " TEXT, " +
-                SurveyData.SURVEYER_COL_PASSWORD + " TEXT NOT NULL)");
-
-        db.execSQL("CREATE TABLE " + SurveyData.SURVEYEE_TABLE + " ( " +
-                SurveyData.SURVEYEE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                SurveyData.SURVEYEE_COL_FIRSTNAME + " TEXT NOT NULL, " +
-                SurveyData.SURVEYEE_COL_LASTNAME + " TEXT NOT NULL, " +
-                SurveyData.SURVEYEE_COL_USERNAME + " TEXT NOT NULL)");
+        db.execSQL("CREATE TABLE " + SurveyData.USER_TABLE + " ( " +
+                SurveyData.USER_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                SurveyData.USER_COL_FIRSTNAME + " TEXT, " +
+                SurveyData.USER_COL_LASTNAME + " TEXT, " +
+                SurveyData.USER_COL_USERNAME + " TEXT NOT NULL UNIQUE, " +
+                SurveyData.USER_COL_PASSWORD + " TEXT NOT NULL, " +
+                SurveyData.USER_COL_TYPE + " TEXT NOT NULL)");
 
         db.execSQL("CREATE TABLE " + SurveyData.SURVEY_TABLE + " ( " +
                 SurveyData.SURVEY_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 SurveyData.SURVEY_COL_NAME + " TEXT NOT NULL UNIQUE, " +
                 SurveyData.SURVEY_COL_SURVEYER + " INTEGER, " +
-                " FOREIGN KEY (" + SurveyData.SURVEY_COL_SURVEYER + ") REFERENCES " + SurveyData.SURVEYER_TABLE + "(" + SurveyData.SURVEYER_COL_ID + "))");
+                " FOREIGN KEY (" + SurveyData.SURVEY_COL_SURVEYER + ") REFERENCES " + SurveyData.USER_TABLE + "(" + SurveyData.USER_COL_ID + "))");
 
         db.execSQL("CREATE TABLE " + SurveyData.QUESTION_TABLE + " ( " +
                 SurveyData.QUESTION_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -69,7 +61,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 SurveyData.RESPONSE_COL_RESPONSE + " TEXT NOT NULL, " +
                 SurveyData.RESPONSE_COL_SURVEYEE + " INTEGER, " +
                 SurveyData.RESPONSE_COL_QUESTION + " INTEGER, " +
-                "FOREIGN KEY (" + SurveyData.RESPONSE_COL_SURVEYEE + ") REFERENCES " + SurveyData.SURVEYEE_TABLE + "(" + SurveyData.SURVEYEE_COL_ID + "), " +
+                "FOREIGN KEY (" + SurveyData.RESPONSE_COL_SURVEYEE + ") REFERENCES " + SurveyData.USER_TABLE + "(" + SurveyData.USER_COL_ID + "), " +
                 "FOREIGN KEY (" + SurveyData.RESPONSE_COL_QUESTION + ") REFERENCES " + SurveyData.QUESTION_TABLE + "(" + SurveyData.QUESTION_COL_ID + "))");
     }
 
@@ -82,9 +74,7 @@ public class DataHelper extends SQLiteOpenHelper {
     }
 
     public void deleteTable(SQLiteDatabase database) {
-        database.execSQL("DROP TABLE IF EXISTS " + SurveyData.SURVEYER_TABLE);
-        database.execSQL("DROP TABLE IF EXISTS " + SurveyData.SURVEYEE_TABLE);
-
+        database.execSQL("DROP TABLE IF EXISTS " + SurveyData.USER_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + SurveyData.SURVEY_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + SurveyData.QUESTION_TABLE);
         database.execSQL("DROP TABLE IF EXISTS " + SurveyData.RESPONSE_TABLE);
@@ -92,38 +82,40 @@ public class DataHelper extends SQLiteOpenHelper {
 
     // ** GET METHODS ** //
     // SURVEYER
-    public Surveyer getSurveyer(String username) {
-        Surveyer surveyer = null;
+    public User getUser(String username) {
+        User user = null;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.SURVEYER_TABLE + " WHERE " +
-                SurveyData.SURVEYER_COL_USERNAME + " = ?", new String[]{username});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.USER_TABLE + " WHERE " +
+                SurveyData.USER_COL_USERNAME + " = ?", new String[]{username});
         if (cursor.moveToFirst()) {
-            surveyer = new Surveyer();
-            surveyer.setUsername(username);
-            surveyer.setId(cursor.getInt(cursor.getColumnIndex(SurveyData.SURVEYER_COL_ID)));
-            surveyer.setFirstName(cursor.getString(cursor.getColumnIndex(SurveyData.SURVEYER_COL_FIRSTNAME)));
-            surveyer.setLastName(cursor.getString(cursor.getColumnIndex(SurveyData.SURVEYER_COL_LASTNAME)));
-            surveyer.setPassword(cursor.getString(cursor.getColumnIndex(SurveyData.SURVEYER_COL_PASSWORD)));
+            user = new User();
+            user.setUsername(username);
+            user.setId(cursor.getInt(cursor.getColumnIndex(SurveyData.USER_COL_ID)));
+            user.setFirstName(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_FIRSTNAME)));
+            user.setLastName(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_LASTNAME)));
+            user.setPassword(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_PASSWORD)));
+            user.setUserType(User.UserType.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(SurveyData.USER_COL_TYPE))));
         }
         cursor.close();
-        return surveyer;
+        return user;
     }
 
-    // SURVEYEE
-    public Surveyee getSurveyee(String username) {
-        Surveyee surveyee = null;
+    public User getUser(int id) {
+        User user = null;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.SURVEYEE_TABLE + " WHERE " +
-                SurveyData.SURVEYEE_COL_USERNAME + " = ?", new String[]{username});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.USER_TABLE + " WHERE " +
+                SurveyData.USER_COL_ID + " = ?", new String[]{"" + id});
         if (cursor.moveToFirst()) {
-            surveyee = new Surveyee();
-            surveyee.setUsername(username);
-            surveyee.setId(cursor.getInt(cursor.getColumnIndex(SurveyData.SURVEYEE_COL_ID)));
-            surveyee.setFirstName(cursor.getString(cursor.getColumnIndex(SurveyData.SURVEYEE_COL_FIRSTNAME)));
-            surveyee.setLastName(cursor.getString(cursor.getColumnIndex(SurveyData.SURVEYEE_COL_LASTNAME)));
+            user = new User();
+            user.setId(id);
+            user.setFirstName(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_FIRSTNAME)));
+            user.setLastName(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_LASTNAME)));
+            user.setUsername(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_USERNAME)));
+            user.setPassword(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_PASSWORD)));
+            user.setUserType(User.UserType.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(SurveyData.USER_COL_TYPE))));
         }
         cursor.close();
-        return surveyee;
+        return user;
     }
 
     public List<Survey> getSurveyList(int surveyerId) {
@@ -162,9 +154,6 @@ public class DataHelper extends SQLiteOpenHelper {
         cursor.close();
         return surveyList;
     }
-
-
-
 
     public Question getQuestion(int questionId) {
         Question question = null;
@@ -259,26 +248,17 @@ public class DataHelper extends SQLiteOpenHelper {
     }
 
     // INSERT
-    public long insertSurveyer(Surveyer surveyer) {
+    public long insertUser(User user) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SurveyData.SURVEYER_COL_USERNAME, surveyer.getUsername());
-        contentValues.put(SurveyData.SURVEYER_COL_PASSWORD, surveyer.getPassword());
-        long value = db.insertOrThrow(SurveyData.SURVEYER_TABLE, null, contentValues);
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        return value;
-    }
+        contentValues.put(SurveyData.USER_COL_USERNAME, user.getUsername());
+        contentValues.put(SurveyData.USER_COL_PASSWORD, user.getPassword());
+        contentValues.put(SurveyData.USER_COL_FIRSTNAME, user.getFirstName());
+        contentValues.put(SurveyData.USER_COL_LASTNAME, user.getLastName());
+        contentValues.put(SurveyData.USER_COL_TYPE, user.getUserType().name());
 
-    public long insertSurveyee(Surveyee surveyee) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(SurveyData.SURVEYEE_COL_FIRSTNAME, surveyee.getFirstName());
-        contentValues.put(SurveyData.SURVEYEE_COL_LASTNAME, surveyee.getLastName());
-        contentValues.put(SurveyData.SURVEYEE_COL_USERNAME, surveyee.getUsername());
-        long value = db.insertOrThrow(SurveyData.SURVEYEE_TABLE, null, contentValues);
+        long value = db.insertOrThrow(SurveyData.USER_TABLE, null, contentValues);
         db.setTransactionSuccessful();
         db.endTransaction();
         return value;
@@ -326,30 +306,17 @@ public class DataHelper extends SQLiteOpenHelper {
 
 
     // UPDATE
-    public int updateSurveyer(int id, Surveyer surveyer) {
+    public int updateUser(int id, User user) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-        Cursor cursor = db.rawQuery("UPDATE " + SurveyData.SURVEYER_TABLE + " SET " +
-                        SurveyData.SURVEYER_COL_USERNAME + " = ? , " +
-                        SurveyData.SURVEYER_COL_FIRSTNAME + " = ?, " +
-                        SurveyData.SURVEYER_COL_LASTNAME + " = ?, " +
-                        SurveyData.SURVEYER_COL_PASSWORD + " = ? WHERE " +
-                        SurveyData.SURVEYER_COL_ID + " = ?",
-                new String[]{surveyer.getUsername(), surveyer.getFirstName(), surveyer.getLastName(), surveyer.getPassword(), "" + id});
-        int count = cursor.getCount();
-        cursor.close();
-        return count;
-    }
-
-    public int updateSurveyee(int id, Surveyee surveyee) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        Cursor cursor = db.rawQuery("UPDATE " + SurveyData.SURVEYEE_TABLE + " SET " +
-                        SurveyData.SURVEYEE_COL_FIRSTNAME + " = ?, " +
-                        SurveyData.SURVEYEE_COL_LASTNAME + " = ?, " +
-                        SurveyData.SURVEYEE_COL_USERNAME + " = ? WHERE " +
-                        SurveyData.SURVEYEE_COL_ID + " = ?",
-                new String[]{surveyee.getFirstName(), surveyee.getLastName(), surveyee.getUsername(), "" + id});
+        Cursor cursor = db.rawQuery("UPDATE " + SurveyData.USER_TABLE + " SET " +
+                        SurveyData.USER_COL_USERNAME + " = ?, " +
+                        SurveyData.USER_COL_PASSWORD + " = ?, " +
+                        SurveyData.USER_COL_FIRSTNAME + " = ?, " +
+                        SurveyData.USER_COL_LASTNAME + " = ?, " +
+                        SurveyData.USER_COL_TYPE + " = ? WHERE " +
+                        SurveyData.USER_COL_ID + " = ?",
+                new String[]{user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getUserTypeString(), "" + id});
         int count = cursor.getCount();
         cursor.close();
         return count;
@@ -400,24 +367,17 @@ public class DataHelper extends SQLiteOpenHelper {
     }
 
     // DELETE
-    public void deleteSurveyer(int id) {
+    public void deleteUser(int id) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
-            db.delete(SurveyData.SURVEYER_TABLE, SurveyData.SURVEYER_COL_ID + " LIKE ?", new String[]{String.valueOf(id)});
+            db.delete(SurveyData.USER_TABLE, SurveyData.USER_COL_ID + " LIKE ?", new String[]{String.valueOf(id)});
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.d(TAG, "Error deleting Appointment");
         } finally {
             db.endTransaction();
         }
-    }
-
-    public void deleteSurveyee(int id) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        db.delete(SurveyData.SURVEYEE_TABLE, SurveyData.SURVEYEE_COL_ID + " = " + id, null);
-        db.endTransaction();
     }
 
     public void deleteSurvey(int id) {
@@ -437,7 +397,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public void deleteResponse(int id) {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
-        db.delete(SurveyData.SURVEYEE_TABLE, SurveyData.SURVEYEE_COL_ID + " = " + id, null);
+        db.delete(SurveyData.RESPONSE_TABLE, SurveyData.RESPONSE_COL_ID + " = " + id, null);
         db.endTransaction();
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
 import survey.shakya.sugan.surveyapp.R;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
 import survey.shakya.sugan.surveyapp.model.Survey;
-import survey.shakya.sugan.surveyapp.model.Surveyer;
+import survey.shakya.sugan.surveyapp.model.User;
 
 /**
  * Created by sugan on 08/10/16.
@@ -24,13 +24,17 @@ public class SurveyAdapter extends BaseAdapter {
     private static final int TYPE_COUNT = 1;
     private Context context;
     List<Survey> surveyList = new ArrayList<>();
-    private int surveyerId;
+    User user;
 
-    public SurveyAdapter(Context context, int surveyerId) {
+    public SurveyAdapter(Context context, User user) {
         this.context = context;
-        this.surveyerId = surveyerId;
+        this.user = user;
         DataHelper helper = DataHelper.getInstance(this.context);
-        surveyList = helper.getSurveyList(surveyerId);
+        if(user.getUserType() == User.UserType.SURVEYER) {
+            surveyList = helper.getSurveyList(user.getId());
+        } else {
+            surveyList = helper.getAllSurveys();
+        }
     }
 
     @Override

@@ -8,4 +8,5 @@
     <color name="almostWhite">#F0F0F0</color>
     <color name="darkGreen">#00897B</color>
     <color name="transparent">#00000000</color>
+    <color name="hintColor">#BBBBBB</color>
 </resources>

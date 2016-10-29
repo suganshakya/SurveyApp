@@ -22,12 +22,71 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SIGN IN"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/textColor" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Username :"
+                    android:textColor="@color/textColor" />
+
+                <EditText
+                    android:id="@+id/edit_text_main_username"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Password :"
+                    android:textColor="@color/textColor" />
+
+                <EditText
+                    android:id="@+id/edit_text_main_password"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:inputType="textPassword" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="Sign In"
+                android:textColor="@color/darkGreen"
+                android:textStyle="bold"
+                android:onClick="signIn"
+                android:layout_gravity="center"
+                />
+
+            <!--FOR REGISTRATION-->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/vertical_gap"
-                android:text="Fill up a survey"
+                android:text="REGISTER / SIGN UP"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 android:textColor="@color/textColor" />
 
@@ -45,7 +104,7 @@
                     android:textColor="@color/textColor" />
 
                 <EditText
-                    android:id="@+id/edit_text_first_name_surveyee"
+                    android:id="@+id/edit_text_first_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2" />
@@ -65,7 +124,7 @@
                     android:textColor="@color/textColor" />
 
                 <EditText
-                    android:id="@+id/edit_text_last_name_surveyee"
+                    android:id="@+id/edit_text_last_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2" />
@@ -85,31 +144,14 @@
                     android:textColor="@color/textColor" />
 
                 <EditText
-                    android:id="@+id/edit_text_username_surveyee"
+                    android:id="@+id/edit_text_username1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:hint="Must be unique"
+                    android:textColorHint="@color/hintColor"
                     />
             </LinearLayout>
-
-            <Button
-                android:id="@+id/fill_up_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:text="Fill up"
-                android:textColor="@color/darkGreen"
-                android:textStyle="bold"
-                android:onClick="fillUp"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Login to add Survey or Questions"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:textColor="@color/textColor" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,66 +163,75 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="username :"
+                    android:text="Password :"
                     android:textColor="@color/textColor" />
 
                 <EditText
-                    android:id="@+id/edit_text_main_username"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="password :"
-                    android:textColor="@color/textColor" />
-
-                <EditText
-                    android:id="@+id/edit_text_main_password"
+                    android:id="@+id/edit_text_password1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:inputType="textPassword" />
+                    />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2">
+                android:weightSum="3">
 
-                <Button
-                    android:id="@+id/sign_in_button"
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/transparent"
-                    android:text="Sign In"
-                    android:textColor="@color/darkGreen"
-                    android:textStyle="bold"
-                    android:onClick="signIn"
-                    />
+                    android:text="Password :"
+                    android:textColor="@color/textColor" />
 
-                <Button
-                    android:id="@+id/register_button"
+                <EditText
+                    android:id="@+id/edit_text_password2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/transparent"
-                    android:text="Register"
-                    android:textColor="@color/darkGreen"
-                    android:textStyle="bold"
-                    android:onClick="register"
+                    android:layout_weight="2"
+                    android:hint="Repeat the password again"
+                    android:textColorHint="@color/hintColor"
                     />
             </LinearLayout>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radio_group_user_role"
+                android:orientation="horizontal"
+                android:weightSum="2">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radio_button_surveyee"
+                    android:text="Surveyee"
+                    android:layout_weight="1"
+                    />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radio_button_surveyer"
+                    android:text="Surveyer"
+                    android:layout_weight="1"
+                    />
+            </RadioGroup>
+
+
+            <Button
+                android:id="@+id/register_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="Register"
+                android:textColor="@color/darkGreen"
+                android:textStyle="bold"
+                android:onClick="register"
+                android:layout_gravity="center"
+                android:elevation="4dp" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

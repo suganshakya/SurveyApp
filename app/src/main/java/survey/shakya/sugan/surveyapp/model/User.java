@@ -1,24 +1,30 @@
 package survey.shakya.sugan.surveyapp.model;
 
 /**
- * Created by sugan on 28/09/16.
+ * Created by sugan on 29/10/16.
  */
 
-public class Surveyer {
+public class User {
     int id;
     String username;
     String firstName;
     String lastName;
     String password;
+    UserType userType;
 
-    public Surveyer() {
+    public enum UserType {
+        SURVEYER, SURVEYEE;
     }
 
-    public Surveyer(String username, String firstName, String lastName, String password) {
-        this.username = username;
+    public User() {
+    }
+
+    public User(String firstName, String lastName, String username, String password, UserType userType) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.username = username;
         this.password = password;
+        this.userType = userType;
     }
 
     public int getId() {
@@ -59,5 +65,17 @@ public class Surveyer {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public String getUserTypeString(){
+        return userType.name();
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 }

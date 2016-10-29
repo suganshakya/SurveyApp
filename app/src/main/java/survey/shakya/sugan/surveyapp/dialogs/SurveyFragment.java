@@ -20,7 +20,6 @@ import survey.shakya.sugan.surveyapp.model.Survey;
 public class SurveyFragment extends DialogFragment {
     private static String TAG = SurveyFragment.class.getName();
 
-
     private static final String ARG_SURVEYER_ID = "surveyerId";
 
     private int surveyerId;
