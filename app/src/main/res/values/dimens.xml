@@ -6,5 +6,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="custom_horizontal_margin">10dp</dimen>
     <dimen name="custom_vertical_margin">10dp</dimen>
+    <dimen name="text_height">18dp</dimen>
 
 </resources>

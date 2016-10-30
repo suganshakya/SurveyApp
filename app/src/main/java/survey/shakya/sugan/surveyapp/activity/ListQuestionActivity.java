@@ -16,8 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import survey.shakya.sugan.surveyapp.R;
-import survey.shakya.sugan.surveyapp.adapter.QuestionAdapterForSurveyee;
-import survey.shakya.sugan.surveyapp.adapter.QuestionAdapterForSurveyer;
+import survey.shakya.sugan.surveyapp.adapter.QuestionAdapter;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
 import survey.shakya.sugan.surveyapp.dialogs.QuestionFragment;
 import survey.shakya.sugan.surveyapp.dialogs.UpdateQuestionFragment;
@@ -33,7 +32,7 @@ public class ListQuestionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_question_for_surveyer);
+        setContentView(R.layout.activity_list_question);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -47,36 +46,34 @@ public class ListQuestionActivity extends AppCompatActivity {
 
         userId = intent.getIntExtra("USER_ID", -1);
         if (surveyId == -1) {
-            Toast.makeText(getApplicationContext(), "Invalid Surveyee ID", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Invalid User ID", Toast.LENGTH_SHORT).show();
             return;
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         DataHelper dataHelper = DataHelper.getInstance(getApplicationContext());
         User user = dataHelper.getUser(userId);
-        if(user.getUserType() == User.UserType.SURVEYER) {
+
+        if (user.getUserType() == User.UserType.SURVEYER) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     showCreateQuestionDialog();
                 }
             });
-
-            questionAdapter = new QuestionAdapterForSurveyer(getApplicationContext(), surveyId);
-        } else {
-            fab.hide();
-            questionAdapter = new QuestionAdapterForSurveyee(getApplicationContext(), userId, surveyId);
         }
+        questionAdapter = new QuestionAdapter(this, getApplicationContext(), userId, surveyId);
 
         if (questionAdapter == null) {      // TODO: redundant code
             Toast.makeText(getApplicationContext(), "No Question Found for survey - " + surveyId, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        ListView listView = (ListView) findViewById(R.id.list_view_question_for_surveyer);
+        ListView listView = (ListView) findViewById(R.id.list_view_question);
         listView.setAdapter(questionAdapter);
 
-        if(user.getUserType() == User.UserType.SURVEYER) {
+        if (user.getUserType() == User.UserType.SURVEYER) {
+            Log.e(TAG, "Edit question.");
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -105,10 +102,11 @@ public class ListQuestionActivity extends AppCompatActivity {
         questionFragment.show(ft, "QuestionDialogFragment");
     }
 
-    public void showUpdateQuestionDialog(int questionId){
+    public void showUpdateQuestionDialog(int questionId) {
+        Log.i(TAG, "Show Update Question Dialog.");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("UpdateQuestionDialogFragment");
-        if(prev != null){
+        if (prev != null) {
             ft.remove(prev);
         }
         ft.addToBackStack(null);

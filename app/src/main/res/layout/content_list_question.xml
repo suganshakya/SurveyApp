@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="survey.shakya.sugan.surveyapp.activity.ListQuestionActivity"
-    tools:showIn="@layout/activity_list_question_for_surveyer">
+    tools:showIn="@layout/activity_list_question">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:text="@string/list_of_question" />
 
         <ListView
-            android:id="@+id/list_view_question_for_surveyer"
+            android:id="@+id/list_view_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

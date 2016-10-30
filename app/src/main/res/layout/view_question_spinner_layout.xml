@@ -6,11 +6,12 @@
 
     <include layout="@layout/view_question_basic" />
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/radio_group_view_question_surveyee"
-            android:orientation="horizontal"
-            android:weightSum="4">
-        </RadioGroup>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner_view_question_for_surveyee">
+    </Spinner>
+
+    <include layout="@layout/edit_question_buttons" />
+
 </LinearLayout>

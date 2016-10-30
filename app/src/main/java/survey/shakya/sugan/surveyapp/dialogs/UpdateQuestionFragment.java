@@ -20,6 +20,9 @@ public class UpdateQuestionFragment extends DialogFragment {
     private static final String ARG_QUESTION_ID = "questionId";
 
     private int questionId;
+    private Question question;
+
+    DataHelper dataHelper;
 
     public UpdateQuestionFragment() {
         // Required empty public constructor
@@ -54,9 +57,9 @@ public class UpdateQuestionFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final DataHelper dataHelper = DataHelper.getInstance(getContext());
+        dataHelper = DataHelper.getInstance(getContext());
 
-        final Question question = dataHelper.getQuestion(questionId);
+        question = dataHelper.getQuestion(questionId);
         View view = inflater.inflate(R.layout.fragment_update_question, container, false);
         Dialog dialog= getDialog();
         if(dialog != null){

@@ -1,12 +1,17 @@
 package survey.shakya.sugan.surveyapp.adapter;
 
 import android.content.Context;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -18,26 +23,33 @@ import java.util.List;
 
 import survey.shakya.sugan.surveyapp.R;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
+import survey.shakya.sugan.surveyapp.dialogs.UpdateQuestionFragment;
 import survey.shakya.sugan.surveyapp.model.Question;
-import survey.shakya.sugan.surveyapp.model.Survey;
+import survey.shakya.sugan.surveyapp.model.User;
 
 /**
  * Created by sugan on 08/10/16.
  */
 
-public class QuestionAdapterForSurveyee extends BaseAdapter {
+public class QuestionAdapter extends BaseAdapter {
+    private static String TAG = QuestionAdapter.class.getName();
+
     private static final int TYPE_COUNT = 4;
 
+    private AppCompatActivity activity;
     private Context context;
     List<Question> questionList = new ArrayList<>();
     private int surveyId;
-    private int surveyeeId;
+    private int userId;
+    private User user;
 
-    public QuestionAdapterForSurveyee(Context context, int surveyeeId, int surveyId) {
+    public QuestionAdapter(AppCompatActivity activity, Context context, int userId, int surveyId) {
+        this.activity =activity;
         this.context = context;
         this.surveyId = surveyId;
-        this.surveyeeId = surveyeeId;
+        this.userId = userId;
         DataHelper helper = DataHelper.getInstance(this.context);
+        user = helper.getUser(userId);
         questionList = helper.getQuestionList(surveyId);
     }
 
@@ -67,7 +79,7 @@ public class QuestionAdapterForSurveyee extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, final View convertView, ViewGroup parent) {
         View view = convertView;
 
         if (view == null) {
@@ -75,14 +87,14 @@ public class QuestionAdapterForSurveyee extends BaseAdapter {
                 Toast.makeText(context, "No Question Found for Survey", Toast.LENGTH_SHORT).show();
                 return view;
             }
-            Question question = questionList.get(position);
+            final Question question = questionList.get(position);
             LayoutInflater layoutInflater = (LayoutInflater) parent.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             TextView questionIdTextView;
             TextView questionQuestionTextView;
             switch (question.getType()) {
                 case Question.FILL_IN_BLANK:
-                    view = layoutInflater.inflate(R.layout.view_question_text_layout_for_surveyee, parent, false);
+                    view = layoutInflater.inflate(R.layout.view_question_text_layout, parent, false);
                     questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
                     questionIdTextView.setText("" + question.getId());
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
@@ -92,7 +104,7 @@ public class QuestionAdapterForSurveyee extends BaseAdapter {
                     break;
 
                 case Question.TRUE_FALSE:
-                    view = layoutInflater.inflate(R.layout.view_question_true_false_layout_for_surveyee, parent, false);
+                    view = layoutInflater.inflate(R.layout.view_question_true_false_layout, parent, false);
 
                     questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
                     questionIdTextView.setText("" + question.getId());
@@ -111,7 +123,7 @@ public class QuestionAdapterForSurveyee extends BaseAdapter {
                     break;
 
                 case Question.SPINNER:
-                    view = layoutInflater.inflate(R.layout.view_question_spinner_layout_for_surveyee, parent, false);
+                    view = layoutInflater.inflate(R.layout.view_question_spinner_layout, parent, false);
                     questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
                     questionIdTextView.setText("" + question.getId());
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
@@ -130,9 +142,9 @@ public class QuestionAdapterForSurveyee extends BaseAdapter {
                     break;
 
                 case Question.RADIO:
-                    view = layoutInflater.inflate(R.layout.view_question_radio_layout_for_surveyee, parent, false);
+                    view = layoutInflater.inflate(R.layout.view_question_radio_layout, parent, false);
                     questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
-                    questionIdTextView.setText(""+ question.getId());
+                    questionIdTextView.setText("" + question.getId());
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
                     questionQuestionTextView.setText(question.getQuestion());
 
@@ -148,7 +160,48 @@ public class QuestionAdapterForSurveyee extends BaseAdapter {
                     }
                     break;
             }
+
+            ImageButton editButton = (ImageButton) view.findViewById(R.id.edit_icon);
+
+            if(user.getUserType() == User.UserType.SURVEYER) {
+
+                editButton.setVisibility(View.VISIBLE);
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+                        Fragment prev = activity.getSupportFragmentManager().findFragmentByTag("UpdateQuestionDialogFragment");
+                        if (prev != null) {
+                            ft.remove(prev);
+                        }
+                        ft.addToBackStack(null);
+
+                        DialogFragment surveyFragment = UpdateQuestionFragment.newInstance(question.getId());
+                        surveyFragment.show(ft, "UpdateQuestionDialogFragment");
+                    }
+                });
+
+            } else {
+                editButton.setVisibility(View.GONE);
+            }
+
+            ImageButton deleteButton = (ImageButton) view.findViewById(R.id.delete_icon);
+            if(user.getUserType() == User.UserType.SURVEYER) {
+                deleteButton.setVisibility(View.VISIBLE);
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DataHelper dataHelper = DataHelper.getInstance(context);
+                        dataHelper.deleteQuestion(question.getId());
+                        Toast.makeText(context, "Question " + question.getId() + " deleted.", Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                deleteButton.setVisibility(View.GONE);
+            }
         }
+
         return view;
     }
+
 }

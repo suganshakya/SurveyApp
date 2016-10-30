@@ -44,9 +44,10 @@ public class DataHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE " + SurveyData.SURVEY_TABLE + " ( " +
                 SurveyData.SURVEY_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                SurveyData.SURVEY_COL_NAME + " TEXT NOT NULL UNIQUE, " +
+                SurveyData.SURVEY_COL_NAME + " TEXT NOT NULL, " +
                 SurveyData.SURVEY_COL_SURVEYER + " INTEGER, " +
-                " FOREIGN KEY (" + SurveyData.SURVEY_COL_SURVEYER + ") REFERENCES " + SurveyData.USER_TABLE + "(" + SurveyData.USER_COL_ID + "))");
+                "UNIQUE (" + SurveyData.SURVEY_COL_NAME + "," + SurveyData.SURVEY_COL_SURVEYER + "), " +
+                "FOREIGN KEY (" + SurveyData.SURVEY_COL_SURVEYER + ") REFERENCES " + SurveyData.USER_TABLE + "(" + SurveyData.USER_COL_ID + "))");
 
         db.execSQL("CREATE TABLE " + SurveyData.QUESTION_TABLE + " ( " +
                 SurveyData.QUESTION_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -54,7 +55,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 SurveyData.QUESTION_COL_TYPE + " TEXT NOT NULL, " +
                 SurveyData.QUESTION_COL_OPTIONS + " TEXT, " +
                 SurveyData.QUESTION_COL_SURVEY + " INTEGER, " +
-                " FOREIGN KEY (" + SurveyData.QUESTION_COL_SURVEY + ") REFERENCES " + SurveyData.SURVEY_TABLE + "(" + SurveyData.QUESTION_COL_ID + "))");
+                 "FOREIGN KEY (" + SurveyData.QUESTION_COL_SURVEY + ") REFERENCES " + SurveyData.SURVEY_TABLE + "(" + SurveyData.QUESTION_COL_ID + "))");
 
         db.execSQL("CREATE TABLE " + SurveyData.RESPONSE_TABLE + " ( " +
                 SurveyData.RESPONSE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -369,36 +370,29 @@ public class DataHelper extends SQLiteOpenHelper {
     // DELETE
     public void deleteUser(int id) {
         SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        try {
-            db.delete(SurveyData.USER_TABLE, SurveyData.USER_COL_ID + " LIKE ?", new String[]{String.valueOf(id)});
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.d(TAG, "Error deleting Appointment");
-        } finally {
-            db.endTransaction();
-        }
+        db.execSQL("DELETE FROM " + SurveyData.USER_TABLE +
+                " WHERE " + SurveyData.USER_COL_ID + " = " + id);
+        db.close();
     }
 
     public void deleteSurvey(int id) {
         SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        db.delete(SurveyData.SURVEY_TABLE, SurveyData.SURVEY_COL_ID + " = " + id, null);
-        db.endTransaction();
+        db.execSQL("DELETE FROM " + SurveyData.SURVEY_TABLE +
+                " WHERE " + SurveyData.SURVEY_COL_ID + " = " + id);
+        db.close();
     }
 
     public void deleteQuestion(int id) {
         SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        db.delete(SurveyData.QUESTION_TABLE, SurveyData.QUESTION_COL_ID + " = " + id, null);
-        db.endTransaction();
+        db.execSQL("DELETE FROM " + SurveyData.QUESTION_TABLE +
+                        " WHERE " + SurveyData.QUESTION_COL_ID + " = " + id);
+        db.close();
     }
 
     public void deleteResponse(int id) {
         SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        db.delete(SurveyData.RESPONSE_TABLE, SurveyData.RESPONSE_COL_ID + " = " + id, null);
-        db.endTransaction();
+        db.execSQL("DELETE FROM " + SurveyData.RESPONSE_TABLE +
+                " WHERE " + SurveyData.RESPONSE_COL_ID + " = " + id);
+        db.close();
     }
-
 }

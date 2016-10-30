@@ -75,6 +75,14 @@ public class ListSurveyActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        Log.i(TAG, "List of Survey Resumed.");
+        super.onResume();
+        surveyAdapter.notifyDataSetChanged();
+
+    }
+
     public void showCreateSurveyDialog() {       // Only for Surveyer
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("SurveyDialogFragment");

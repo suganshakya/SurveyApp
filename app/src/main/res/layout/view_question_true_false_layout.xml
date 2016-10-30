@@ -27,4 +27,7 @@
             android:layout_weight="1"
             />
     </RadioGroup>
+
+    <include layout="@layout/edit_question_buttons" />
+
 </LinearLayout>
