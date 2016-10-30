@@ -30,8 +30,7 @@ import survey.shakya.sugan.surveyapp.model.User;
 public class ListSurveyActivity extends AppCompatActivity {
     private static String TAG = ListSurveyActivity.class.getName();
     User user;
-//    int userId;
-//    String username;
+    SurveyAdapter surveyAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +52,7 @@ public class ListSurveyActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         if(user.getUserType() == User.UserType.SURVEYEE){
-            fab.hide(); // No need for Surveyee
+            fab.hide();     // No need for Surveyee
         } else {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -63,7 +62,7 @@ public class ListSurveyActivity extends AppCompatActivity {
             });
         }
 
-        final SurveyAdapter surveyAdapter = new SurveyAdapter(getApplicationContext(), user);
+        surveyAdapter = new SurveyAdapter(getApplicationContext(), user);
         if (surveyAdapter == null) {    // TODO: redundant code --- check it
             Toast.makeText(getApplicationContext(), "No Survey Found for userId - " + userId, Toast.LENGTH_SHORT).show();
             return;
@@ -75,7 +74,7 @@ public class ListSurveyActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Log.i(TAG, "Item " + position +" Selected");
                     Survey survey = (Survey) surveyAdapter.getItem(position);
-                    listQuestion(survey.getId());
+                    listQuestion(user.getId(), survey.getId());
                 }
             });
         }
@@ -93,13 +92,14 @@ public class ListSurveyActivity extends AppCompatActivity {
         surveyFragment.show(ft, "SurveyDialogFragment");
     }
 
-    public void listQuestion(int surveyId) {
+    public void listQuestion(int userId, int surveyId) {
         Intent intent;
         if(user.getUserType() == User.UserType.SURVEYER) {
             intent = new Intent(ListSurveyActivity.this, ListQuestionForSurveyerActivity.class);
         } else {
             intent = new Intent(ListSurveyActivity.this, ListQuestionForSurveyeeActivity.class);
         }
+        intent.putExtra("USER_ID", userId);
         intent.putExtra("SURVEY_ID", surveyId);
         ListSurveyActivity.this.startActivity(intent);
     }

@@ -18,7 +18,6 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import survey.shakya.sugan.surveyapp.activity.ListSurveyActivity;
-import survey.shakya.sugan.surveyapp.activity.ListSurveyActivityForSurveyee;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
 import survey.shakya.sugan.surveyapp.model.User;
 

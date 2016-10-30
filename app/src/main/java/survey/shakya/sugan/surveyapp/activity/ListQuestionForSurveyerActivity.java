@@ -25,8 +25,9 @@ import survey.shakya.sugan.surveyapp.model.Survey;
 
 public class ListQuestionForSurveyerActivity extends AppCompatActivity {
     private static String TAG = ListQuestionForSurveyerActivity.class.getName();
-
+    int userId;
     int surveyId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +36,7 @@ public class ListQuestionForSurveyerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
+        userId = intent.getIntExtra("USER_ID", -1);
         surveyId = intent.getIntExtra("SURVEY_ID", -1);
         if (surveyId == -1) {
             Toast.makeText(getApplicationContext(), "Invalid Survey ID", Toast.LENGTH_SHORT).show();

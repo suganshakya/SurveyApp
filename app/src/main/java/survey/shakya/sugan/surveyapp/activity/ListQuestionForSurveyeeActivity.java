@@ -26,7 +26,7 @@ public class ListQuestionForSurveyeeActivity extends AppCompatActivity {
     private static String TAG = ListQuestionForSurveyeeActivity.class.getName();
 
     int surveyId;
-    int surveyeeId;
+    int userId; // surveyee ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +41,9 @@ public class ListQuestionForSurveyeeActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Invalid Survey ID", Toast.LENGTH_SHORT).show();
             return;
         }
-        surveyeeId = intent.getIntExtra("SURVEYEE_ID", -1);
-        if (surveyeeId == -1) {
+
+        userId = intent.getIntExtra("USER_ID", -1);
+        if (surveyId == -1) {
             Toast.makeText(getApplicationContext(), "Invalid Surveyee ID", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -57,7 +58,7 @@ public class ListQuestionForSurveyeeActivity extends AppCompatActivity {
 //            }
 //        });
 
-        QuestionAdapterForSurveyee questionAdapter = new QuestionAdapterForSurveyee(getApplicationContext(), surveyeeId, surveyId);
+        QuestionAdapterForSurveyee questionAdapter = new QuestionAdapterForSurveyee(getApplicationContext(), userId, surveyId);
 
         ListView listView = (ListView) findViewById(R.id.list_view_question_for_surveyee);
         listView.setAdapter(questionAdapter);
