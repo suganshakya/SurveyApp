@@ -11,22 +11,24 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import survey.shakya.sugan.surveyapp.R;
 import survey.shakya.sugan.surveyapp.adapter.QuestionAdapterForSurveyee;
 import survey.shakya.sugan.surveyapp.adapter.QuestionAdapterForSurveyer;
+import survey.shakya.sugan.surveyapp.data.DataHelper;
 import survey.shakya.sugan.surveyapp.dialogs.QuestionFragment;
-import survey.shakya.sugan.surveyapp.dialogs.SurveyFragment;
 import survey.shakya.sugan.surveyapp.dialogs.UpdateQuestionFragment;
 import survey.shakya.sugan.surveyapp.model.Question;
-import survey.shakya.sugan.surveyapp.model.Survey;
+import survey.shakya.sugan.surveyapp.model.User;
 
-public class ListQuestionForSurveyerActivity extends AppCompatActivity {
-    private static String TAG = ListQuestionForSurveyerActivity.class.getName();
+public class ListQuestionActivity extends AppCompatActivity {
+    private static String TAG = ListQuestionActivity.class.getName();
     int userId;
     int surveyId;
+    BaseAdapter questionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,30 +45,47 @@ public class ListQuestionForSurveyerActivity extends AppCompatActivity {
             return;
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCreateQuestionDialog();
-            }
-        });
+        userId = intent.getIntExtra("USER_ID", -1);
+        if (surveyId == -1) {
+            Toast.makeText(getApplicationContext(), "Invalid Surveyee ID", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        final QuestionAdapterForSurveyer questionAdapter = new QuestionAdapterForSurveyer(getApplicationContext(), surveyId);
-        if (questionAdapter == null) {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        DataHelper dataHelper = DataHelper.getInstance(getApplicationContext());
+        User user = dataHelper.getUser(userId);
+        if(user.getUserType() == User.UserType.SURVEYER) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showCreateQuestionDialog();
+                }
+            });
+
+            questionAdapter = new QuestionAdapterForSurveyer(getApplicationContext(), surveyId);
+        } else {
+            fab.hide();
+            questionAdapter = new QuestionAdapterForSurveyee(getApplicationContext(), userId, surveyId);
+        }
+
+        if (questionAdapter == null) {      // TODO: redundant code
             Toast.makeText(getApplicationContext(), "No Question Found for survey - " + surveyId, Toast.LENGTH_SHORT).show();
             return;
         }
 
         ListView listView = (ListView) findViewById(R.id.list_view_question_for_surveyer);
         listView.setAdapter(questionAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(TAG, "Item " + position +" Selected");
-                Question question = (Question) questionAdapter.getItem(position);
-                showUpdateQuestionDialog(question.getId());
-            }
-        });
+
+        if(user.getUserType() == User.UserType.SURVEYER) {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.i(TAG, "Item " + position + " Selected");
+                    Question question = (Question) questionAdapter.getItem(position);
+                    showUpdateQuestionDialog(question.getId());
+                }
+            });
+        }
     }
 
     @Override

@@ -30,14 +30,9 @@
         </activity>
 
         <activity
-            android:name=".activity.ListQuestionForSurveyerActivity"
+            android:name=".activity.ListQuestionActivity"
             android:exported="true"
             android:label="@string/title_activity_list_question_for_surveyer"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.ListQuestionForSurveyeeActivity"
-            android:exported="true"
-            android:label="@string/title_activity_list_question_for_surveyee"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ListResponseBySurveyActivity"
