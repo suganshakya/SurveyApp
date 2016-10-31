@@ -57,7 +57,7 @@ public class ListSurveyActivity extends AppCompatActivity {
             });
         }
 
-        surveyAdapter = new SurveyAdapter(getApplicationContext(), user);
+        surveyAdapter = new SurveyAdapter(this, getApplicationContext(), user);
         if (surveyAdapter == null) {    // TODO: redundant code --- check it
             Toast.makeText(getApplicationContext(), "No Survey Found for userId - " + userId, Toast.LENGTH_SHORT).show();
             return;

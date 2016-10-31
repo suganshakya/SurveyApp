@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/custom_horizontal_margin"
-            android:text="Hello"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
             android:textColor="@color/textColor" />
 
         <TextView
@@ -22,9 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="2dp"
-            android:text="Hello2"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
-
             android:textColor="@color/textColor" />
     </LinearLayout>
 
@@ -33,9 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="2dp"
-        android:text="Hello3"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
-
         android:textColor="@color/textColor" />
 
 

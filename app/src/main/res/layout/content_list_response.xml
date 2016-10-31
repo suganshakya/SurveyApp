@@ -13,25 +13,20 @@
     tools:context="survey.shakya.sugan.surveyapp.activity.ListResponseActivity"
     tools:showIn="@layout/activity_list_response_by_question">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/list_of_response"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="@string/list_of_response" />
-
-            <ListView
-                android:id="@+id/list_view_response_by_question"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </ScrollView>
+        <ListView
+            android:id="@+id/list_view_response_by_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </RelativeLayout>

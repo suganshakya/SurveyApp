@@ -13,6 +13,7 @@ import java.util.List;
 
 import survey.shakya.sugan.surveyapp.R;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
+import survey.shakya.sugan.surveyapp.model.Question;
 import survey.shakya.sugan.surveyapp.model.Response;
 import survey.shakya.sugan.surveyapp.model.Survey;
 import survey.shakya.sugan.surveyapp.model.User;
@@ -37,7 +38,6 @@ public class ResponseAdapter extends BaseAdapter {
         } else {
             responseList = helper.getResponseListByQuestion(questionId);
         }
-
     }
 
     @Override
@@ -70,6 +70,8 @@ public class ResponseAdapter extends BaseAdapter {
                 Toast.makeText(context, "No Survey Found in Database.", Toast.LENGTH_SHORT).show();
                 return view;
             }
+            DataHelper dataHelper = DataHelper.getInstance(context);
+
             Response response = responseList.get(position);
             LayoutInflater layoutInflater = (LayoutInflater) parent.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -79,9 +81,11 @@ public class ResponseAdapter extends BaseAdapter {
             responseIdTV.setText(response.getId() + "");
             TextView referenceTV = (TextView) view.findViewById(R.id.text_view_question_or_surveyee_name);
             if(isByUser) {
-                referenceTV.setText(""+ response.getSurveyeeId());
+                User user = dataHelper.getUser(response.getSurveyeeId());
+                referenceTV.setText("Surveyee: " + user.getFirstName() + " " + user.getLastName());
             } else {
-                referenceTV.setText("" + response.getQuestionId());
+                Question question = dataHelper.getQuestion(response.getQuestionId());
+                referenceTV.setText("Question: " + question.getQuestion());
             }
             TextView responseTextTV = (TextView) view.findViewById(R.id.text_view_response_text1);
             responseTextTV.setText(response.getResponse());

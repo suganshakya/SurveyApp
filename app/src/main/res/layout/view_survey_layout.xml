@@ -4,19 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/text_view_survey_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/custom_horizontal_margin"
-        android:textColor="@color/textColor"/>
+        <TextView
+            android:id="@+id/text_view_survey_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/custom_horizontal_margin"
+            android:elevation="2dp"
+            android:layout_gravity="center"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:textColor="@color/textColor" />
 
-    <TextView
-        android:id="@+id/text_view_survey_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:elevation="2dp"
-        android:textColor="@color/textColor"/>
+        <TextView
+            android:id="@+id/text_view_survey_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="2dp"
+            android:layout_gravity="center"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:textColor="@color/textColor" />
+
+    <include layout="@layout/edit_question_buttons" />
 
 </LinearLayout>

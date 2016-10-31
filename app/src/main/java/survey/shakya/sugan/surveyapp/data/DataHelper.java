@@ -119,6 +119,21 @@ public class DataHelper extends SQLiteOpenHelper {
         return user;
     }
 
+    public Survey getSurvey(int surveyId) {
+        Survey survey = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.SURVEY_TABLE + " WHERE " +
+                SurveyData.SURVEY_COL_ID + " = ?", new String[]{""+surveyId});
+        if (cursor.moveToFirst()) {
+            survey = new Survey();
+            survey.setId(surveyId);
+            survey.setName(cursor.getString(cursor.getColumnIndex(SurveyData.SURVEY_COL_NAME)));
+            survey.setSurveyerId(cursor.getInt(cursor.getColumnIndex(SurveyData.SURVEY_COL_SURVEYER)));
+        }
+        cursor.close();
+        return survey;
+    }
+
     public List<Survey> getSurveyList(int surveyerId) {
         List<Survey> surveyList = null;
         SQLiteDatabase db = getReadableDatabase();
@@ -323,7 +338,7 @@ public class DataHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    public int updateSurvey(int id, Survey survey) {
+    public int updateSurvey(int id, Survey survey) {    // id value of survey is not considered
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         Cursor cursor = db.rawQuery("UPDATE " + SurveyData.SURVEY_TABLE + " SET " +

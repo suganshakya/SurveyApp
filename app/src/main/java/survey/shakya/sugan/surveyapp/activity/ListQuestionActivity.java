@@ -70,7 +70,10 @@ public class ListQuestionActivity extends AppCompatActivity {
                     showCreateQuestionDialog();
                 }
             });
+        } else {
+            fab.setVisibility(View.GONE);
         }
+
         questionAdapter = new QuestionAdapter(this, getApplicationContext(), userId, surveyId);
 
         if (questionAdapter == null) {      // TODO: redundant code
