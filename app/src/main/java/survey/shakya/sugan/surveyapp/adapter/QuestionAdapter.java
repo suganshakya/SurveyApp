@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import survey.shakya.sugan.surveyapp.R;
+import survey.shakya.sugan.surveyapp.activity.ListQuestionActivity;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
 import survey.shakya.sugan.surveyapp.dialogs.UpdateQuestionFragment;
 import survey.shakya.sugan.surveyapp.model.Question;
@@ -100,7 +101,7 @@ public class QuestionAdapter extends BaseAdapter {
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
                     questionQuestionTextView.setText(question.getQuestion());
 
-                    EditText questionResponseEditText = (EditText) view.findViewById(R.id.edit_text_question_response_for_surveyer);
+                    EditText questionResponseEditText = (EditText) view.findViewById(R.id.edit_text_question_response);
                     break;
 
                 case Question.TRUE_FALSE:
@@ -111,7 +112,7 @@ public class QuestionAdapter extends BaseAdapter {
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
                     questionQuestionTextView.setText(question.getQuestion());
 
-                    RadioGroup trueFalseGroup = (RadioGroup) view.findViewById(R.id.true_false_group_question_for_surveyee);
+                    RadioGroup trueFalseGroup = (RadioGroup) view.findViewById(R.id.radio_group_true_false_response);
                     String[] options = new String[]{"True", "False"};
                     RadioButton rb[] = new RadioButton[options.length];
                     rb[0] = (RadioButton) view.findViewById(R.id.true_button);
@@ -129,7 +130,7 @@ public class QuestionAdapter extends BaseAdapter {
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
                     questionQuestionTextView.setText(question.getQuestion());
 
-                    Spinner spinner = (Spinner) view.findViewById(R.id.spinner_view_question_for_surveyee);
+                    Spinner spinner = (Spinner) view.findViewById(R.id.spinner_question_response);
                     String[] spinnerOptions = question.getOptions().split(",");
 
                     ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(parent.getContext(),
@@ -148,7 +149,7 @@ public class QuestionAdapter extends BaseAdapter {
                     questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
                     questionQuestionTextView.setText(question.getQuestion());
 
-                    RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group_view_question_surveyee);
+                    RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radio_group_question_response);
                     String[] radioOptions = question.getOptions().split(",");
                     for (int i = 0; i < radioOptions.length; ++i) {
                         RadioButton radioButton = new RadioButton(parent.getContext());
@@ -162,7 +163,6 @@ public class QuestionAdapter extends BaseAdapter {
             }
 
             ImageButton editButton = (ImageButton) view.findViewById(R.id.edit_icon);
-
             if(user.getUserType() == User.UserType.SURVEYER) {
 
                 editButton.setVisibility(View.VISIBLE);
@@ -185,6 +185,21 @@ public class QuestionAdapter extends BaseAdapter {
                 editButton.setVisibility(View.GONE);
             }
 
+            ImageButton viewButton = (ImageButton) view.findViewById(R.id.view_icon);
+            if(user.getUserType() == User.UserType.SURVEYER) {
+                viewButton.setVisibility(View.VISIBLE);
+                viewButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(activity instanceof ListQuestionActivity){
+                            ((ListQuestionActivity) activity).startListResponseActivity(question.getId());
+                        }
+                    }
+                });
+            } else {
+                viewButton.setVisibility(View.GONE);
+            }
+
             ImageButton deleteButton = (ImageButton) view.findViewById(R.id.delete_icon);
             if(user.getUserType() == User.UserType.SURVEYER) {
                 deleteButton.setVisibility(View.VISIBLE);
@@ -200,7 +215,6 @@ public class QuestionAdapter extends BaseAdapter {
                 deleteButton.setVisibility(View.GONE);
             }
         }
-
         return view;
     }
 

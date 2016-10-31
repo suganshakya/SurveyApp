@@ -35,12 +35,7 @@
             android:label="@string/title_activity_list_question_for_surveyer"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.ListResponseBySurveyActivity"
-            android:exported="true"
-            android:label="@string/title_activity_list_response_by_survey"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.ListResponseByQuestionActivity"
+            android:name=".activity.ListResponseActivity"
             android:exported="true"
             android:label="@string/title_activity_list_response_by_question"
             android:theme="@style/AppTheme.NoActionBar" />

@@ -20,6 +20,13 @@ public class Response {
         this.response = response;
     }
 
+    public Response(int surveyeeId, int questionId, String response) {
+        this.surveyeeId = surveyeeId;
+        this.questionId = questionId;
+        this.response = response;
+    }
+
+
     public int getId() {
 
         return id;

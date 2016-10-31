@@ -12,7 +12,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/edit_text_question_response_for_surveyer"
+            android:id="@+id/edit_text_question_response"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

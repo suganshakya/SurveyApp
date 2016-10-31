@@ -28,5 +28,16 @@
             android:id="@+id/list_view_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/button_submit_response"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:onClick="submitResponse"
+            android:text="Submit"
+            android:textColor="@color/darkGreen"
+            android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>

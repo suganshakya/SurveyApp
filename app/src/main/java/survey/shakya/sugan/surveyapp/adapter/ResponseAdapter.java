@@ -13,6 +13,7 @@ import java.util.List;
 
 import survey.shakya.sugan.surveyapp.R;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
+import survey.shakya.sugan.surveyapp.model.Response;
 import survey.shakya.sugan.surveyapp.model.Survey;
 import survey.shakya.sugan.surveyapp.model.User;
 
@@ -20,37 +21,39 @@ import survey.shakya.sugan.surveyapp.model.User;
  * Created by sugan on 08/10/16.
  */
 
-public class SurveyAdapter extends BaseAdapter {
+public class ResponseAdapter extends BaseAdapter {
     private static final int TYPE_COUNT = 1;
     private Context context;
-    List<Survey> surveyList = new ArrayList<>();
+    List<Response> responseList = new ArrayList<>();
     User user;
+    boolean isByUser;
 
-    public SurveyAdapter(Context context, User user) {
+    public ResponseAdapter(Context context, boolean isByUser,  User user, int questionId) {
         this.context = context;
         this.user = user;
         DataHelper helper = DataHelper.getInstance(this.context);
-        if(user.getUserType() == User.UserType.SURVEYER) {
-            surveyList = helper.getSurveyList(user.getId());
+        if(isByUser) {
+            responseList = helper.getResponseListBySurveyee(user.getId());
         } else {
-            surveyList = helper.getAllSurveys();
+            responseList = helper.getResponseListByQuestion(questionId);
         }
+
     }
 
     @Override
     public int getCount() {
-        if(surveyList == null){
+        if(responseList == null){
             return 0;
         }
-        return surveyList.size();
+        return responseList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        if(surveyList == null){
+        if(responseList == null){
             return null;
         }
-        return surveyList.get(position);
+        return responseList.get(position);
     }
 
     @Override
@@ -63,19 +66,26 @@ public class SurveyAdapter extends BaseAdapter {
         View view = convertView;
 
         if (view == null) {
-            if(surveyList == null){
+            if(responseList == null){
                 Toast.makeText(context, "No Survey Found in Database.", Toast.LENGTH_SHORT).show();
                 return view;
             }
-            Survey survey = surveyList.get(position);
+            Response response = responseList.get(position);
             LayoutInflater layoutInflater = (LayoutInflater) parent.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.view_survey_layout, parent, false);
+            view = layoutInflater.inflate(R.layout.view_response_layout, parent, false);
 
-            TextView surveyerIdTV = (TextView) view.findViewById(R.id.text_view_survey_id);
-            surveyerIdTV.setText(survey.getId() + "");
-            TextView surveyNameTV = (TextView) view.findViewById(R.id.text_view_survey_name);
-            surveyNameTV.setText(survey.getName());
+            TextView responseIdTV = (TextView) view.findViewById(R.id.text_view_response_id);
+            responseIdTV.setText(response.getId() + "");
+            TextView referenceTV = (TextView) view.findViewById(R.id.text_view_question_or_surveyee_name);
+            if(isByUser) {
+                referenceTV.setText(""+ response.getSurveyeeId());
+            } else {
+                referenceTV.setText("" + response.getQuestionId());
+            }
+            TextView responseTextTV = (TextView) view.findViewById(R.id.text_view_response_text1);
+            responseTextTV.setText(response.getResponse());
+
         }
         return view;
     }
@@ -83,15 +93,5 @@ public class SurveyAdapter extends BaseAdapter {
     @Override
     public int getViewTypeCount() {
         return TYPE_COUNT;
-    }
-
-    public void updateData(){
-        DataHelper helper = DataHelper.getInstance(this.context);
-        if(user.getUserType() == User.UserType.SURVEYER) {
-            surveyList = helper.getSurveyList(user.getId());
-        } else {
-            surveyList = helper.getAllSurveys();
-        }
-        this.notifyDataSetChanged();
     }
 }

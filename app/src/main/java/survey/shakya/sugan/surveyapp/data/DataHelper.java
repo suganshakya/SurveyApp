@@ -395,4 +395,16 @@ public class DataHelper extends SQLiteOpenHelper {
                 " WHERE " + SurveyData.RESPONSE_COL_ID + " = " + id);
         db.close();
     }
+
+    public boolean isSurveyPresent(int surveyerId, String surveyName) {
+        SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.SURVEY_TABLE + " WHERE " +
+                        SurveyData.SURVEY_COL_NAME + " = ? AND " +
+                        SurveyData.SURVEY_COL_SURVEYER + " = ? ",
+                new String[]{surveyName,  "" + surveyerId });
+        int count = cursor.getCount();
+        cursor.close();
+        return count == 1;
+    }
 }

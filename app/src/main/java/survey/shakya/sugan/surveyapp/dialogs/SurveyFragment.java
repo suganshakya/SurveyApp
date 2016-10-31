@@ -72,14 +72,18 @@ public class SurveyFragment extends DialogFragment {
                     Toast.makeText(getContext(), "Enter valid survey Name.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                insertSurvey(surveyName);
+                DataHelper dataHelper = DataHelper.getInstance(getContext());
+                if(dataHelper.isSurveyPresent(surveyerId, surveyName)){
+                    Toast.makeText(getContext(), "Survey Name already exists.", Toast.LENGTH_LONG).show();
+                } else {
+                    insertSurvey(surveyName);
+                }
             }
         });
         return view;
     }
 
     public void insertSurvey(String surveyName){
-
         DataHelper dataHelper = DataHelper.getInstance(getContext());
         Survey survey = new Survey(surveyName, surveyerId);
         long result = dataHelper.insertSurvey(survey);

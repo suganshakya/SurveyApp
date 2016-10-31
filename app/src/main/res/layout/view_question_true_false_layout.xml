@@ -8,7 +8,7 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/true_false_group_question_for_surveyee"
+        android:id="@+id/radio_group_true_false_response"
         android:orientation="horizontal"
         android:weightSum="2">
         <RadioButton

@@ -79,8 +79,7 @@ public class ListSurveyActivity extends AppCompatActivity {
     protected void onResume() {
         Log.i(TAG, "List of Survey Resumed.");
         super.onResume();
-        surveyAdapter.notifyDataSetChanged();
-
+        surveyAdapter.updateData();
     }
 
     public void showCreateSurveyDialog() {       // Only for Surveyer
@@ -96,8 +95,7 @@ public class ListSurveyActivity extends AppCompatActivity {
     }
 
     public void listQuestion(int userId, int surveyId) {
-        Intent intent;
-        intent = new Intent(ListSurveyActivity.this, ListQuestionActivity.class);
+        Intent intent = new Intent(ListSurveyActivity.this, ListQuestionActivity.class);
         intent.putExtra("USER_ID", userId);
         intent.putExtra("SURVEY_ID", surveyId);
         ListSurveyActivity.this.startActivity(intent);

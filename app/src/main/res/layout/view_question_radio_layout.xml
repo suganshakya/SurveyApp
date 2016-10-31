@@ -7,7 +7,7 @@
     <include layout="@layout/view_question_basic" />
 
     <RadioGroup
-        android:id="@+id/radio_group_view_question_surveyee"
+        android:id="@+id/radio_group_question_response"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
