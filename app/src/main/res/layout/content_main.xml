@@ -181,6 +181,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
+                    android:inputType="textPassword"
                     android:layout_weight="2"
                     />
             </LinearLayout>
@@ -205,6 +206,7 @@
                     android:layout_weight="2"
                     android:maxLines="1"
                     android:hint="Repeat again"
+                    android:inputType="textPassword"
                     android:textColorHint="@color/hintColor"
                     />
             </LinearLayout>

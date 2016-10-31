@@ -5,6 +5,9 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,8 +89,12 @@ public class SurveyAdapter extends BaseAdapter {
 
             TextView surveyIdTV = (TextView) view.findViewById(R.id.text_view_survey_id);
             surveyIdTV.setText("" + survey.getId());
+
             TextView surveyNameTV = (TextView) view.findViewById(R.id.text_view_survey_name);
-            surveyNameTV.setText(survey.getName());
+            Spannable content = new SpannableString(survey.getName());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            surveyNameTV.setText(content);
+
             surveyNameTV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
