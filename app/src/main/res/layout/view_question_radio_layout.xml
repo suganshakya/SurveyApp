@@ -10,8 +10,7 @@
         android:id="@+id/radio_group_question_response"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="4"></RadioGroup>
+        android:orientation="vertical"></RadioGroup>
 
     <include layout="@layout/edit_question_buttons" />
 

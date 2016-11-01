@@ -8,5 +8,7 @@
     <dimen name="custom_horizontal_margin">10dp</dimen>
     <dimen name="custom_vertical_margin">10dp</dimen>
     <dimen name="text_height">18dp</dimen>
+    <dimen name="small_horizontal_margin">5dp</dimen>
+    <dimen name="small_vertical_margin">5dp</dimen>
 
 </resources>

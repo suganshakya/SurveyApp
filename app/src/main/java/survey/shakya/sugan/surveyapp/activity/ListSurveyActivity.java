@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import survey.shakya.sugan.surveyapp.R;
@@ -44,6 +48,7 @@ public class ListSurveyActivity extends AppCompatActivity {
         DataHelper dataHelper = DataHelper.getInstance(getApplicationContext());
         user = dataHelper.getUser(userId);
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         if (user.getUserType() == User.UserType.SURVEYEE) {
@@ -57,7 +62,12 @@ public class ListSurveyActivity extends AppCompatActivity {
             });
         }
 
+        TextView textView = (TextView) findViewById(R.id.surveyer_name);
+        textView.setText(user.getUserTypeString() + " : " + user.getName());
+
         surveyAdapter = new SurveyAdapter(this, getApplicationContext(), user);
+
+
         if (surveyAdapter == null) {    // TODO: redundant code --- check it
             Toast.makeText(getApplicationContext(), "No Survey Found for userId - " + userId, Toast.LENGTH_SHORT).show();
             return;
@@ -73,6 +83,34 @@ public class ListSurveyActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.survey_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.survey_settings) {
+            // TODO: 01/11/16
+            if(user.getUserType() == User.UserType.SURVEYER) {
+                Intent intent = new Intent(ListSurveyActivity.this, TableActivity.class);
+                intent.putExtra("SURVEYER_ID", user.getId());
+                ListSurveyActivity.this.startActivity(intent);
+                return true;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

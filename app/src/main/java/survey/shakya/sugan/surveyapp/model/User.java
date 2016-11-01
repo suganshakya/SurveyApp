@@ -12,6 +12,10 @@ public class User {
     String password;
     UserType userType;
 
+    public String getName() {
+        return firstName + " " + lastName;
+    }
+
     public enum UserType {
         SURVEYER, SURVEYEE;
     }

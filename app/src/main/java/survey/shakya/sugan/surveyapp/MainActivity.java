@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         surveyeeRB = (RadioButton) findViewById(R.id.radio_button_surveyee);
         surveyerRB = (RadioButton) findViewById(R.id.radio_button_surveyer);
 
+        userTypeRG.check(R.id.radio_button_surveyee);
         registerButton = (Button) findViewById(R.id.register_button);
     }
 

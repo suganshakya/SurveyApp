@@ -10,4 +10,5 @@
     <color name="transparent">#00000000</color>
     <color name="hintColor">#BBBBBB</color>
     <color name="blue">#0000FF</color>
+    <color name="buttonColor">#F0F0F0</color>
 </resources>

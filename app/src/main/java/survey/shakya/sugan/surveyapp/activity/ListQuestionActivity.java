@@ -149,9 +149,7 @@ public class ListQuestionActivity extends AppCompatActivity {
 
             Response response = new Response(userId, questionId, responseText);
 
-//            long result = dataHelper.insertResponse(response);
             long result = dataHelper.replaceResponse(response);
-
 
             if(result == -1) {
                 Snackbar.make(view, "Error: inserting a response", Snackbar.LENGTH_LONG).show();

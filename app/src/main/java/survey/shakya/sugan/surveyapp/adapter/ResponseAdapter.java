@@ -86,7 +86,7 @@ public class ResponseAdapter extends BaseAdapter {
                 referenceTV.setText("Question: " + question.getQuestion());
             } else {
                 User user = dataHelper.getUser(response.getSurveyeeId());
-                referenceTV.setText("Surveyee: " + user.getFirstName() + " " + user.getLastName());
+                referenceTV.setText("Surveyee: " + user.getName());
             }
             TextView responseTextTV = (TextView) view.findViewById(R.id.text_view_response_text1);
             responseTextTV.setText(response.getResponse());

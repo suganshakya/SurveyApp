@@ -156,7 +156,7 @@ public class QuestionAdapter extends BaseAdapter {
                         radioButton.setText(radioOptions[i]);
                         radioButton.setId(i);
                         radioGroup.addView(radioButton, new RadioGroup.LayoutParams(
-                                RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT)
+                                RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT)
                         );
                     }
                     break;

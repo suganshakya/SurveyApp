@@ -88,8 +88,8 @@ public class DataHelper extends SQLiteOpenHelper {
     public User getUser(String username) {
         User user = null;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.USER_TABLE + " WHERE " +
-                SurveyData.USER_COL_USERNAME + " = ?", new String[]{username});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.USER_TABLE + " WHERE LOWER(" +
+                SurveyData.USER_COL_USERNAME + ") = ?", new String[]{username.toLowerCase()});
         if (cursor.moveToFirst()) {
             user = new User();
             user.setUsername(username);
@@ -135,6 +135,23 @@ public class DataHelper extends SQLiteOpenHelper {
         cursor.close();
         return survey;
     }
+
+    public Survey getSurvey(int surveyerId, String surveyName) {
+        Survey survey = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.SURVEY_TABLE + " WHERE " +
+                SurveyData.SURVEY_COL_NAME + " = ? AND " + SurveyData.SURVEY_COL_SURVEYER + " = ?",
+                new String[]{surveyName,  ""+surveyerId});
+        if (cursor.moveToFirst()) {
+            survey = new Survey();
+            survey.setId(cursor.getInt(cursor.getColumnIndex(SurveyData.SURVEY_COL_ID)));
+            survey.setName(surveyName);
+            survey.setSurveyerId(surveyerId);
+        }
+        cursor.close();
+        return survey;
+    }
+
 
     public List<Survey> getSurveyList(int surveyerId) {
         List<Survey> surveyList = null;
