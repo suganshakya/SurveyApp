@@ -23,7 +23,6 @@ import survey.shakya.sugan.surveyapp.R;
 import survey.shakya.sugan.surveyapp.activity.ListQuestionActivity;
 import survey.shakya.sugan.surveyapp.activity.ListSurveyActivity;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
-import survey.shakya.sugan.surveyapp.dialogs.UpdateQuestionFragment;
 import survey.shakya.sugan.surveyapp.dialogs.UpdateSurveyFragment;
 import survey.shakya.sugan.surveyapp.model.Survey;
 import survey.shakya.sugan.surveyapp.model.User;
@@ -134,8 +133,9 @@ public class SurveyAdapter extends BaseAdapter {
             viewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                // TODO
-                }
+                    if(activity instanceof ListQuestionActivity){
+                        ((ListQuestionActivity) activity).startListResponseActivity(survey.getId());
+                    }                }
             });
         } else {
             viewButton.setVisibility(View.GONE);

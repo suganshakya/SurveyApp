@@ -9,4 +9,5 @@
     <color name="darkGreen">#00897B</color>
     <color name="transparent">#00000000</color>
     <color name="hintColor">#BBBBBB</color>
+    <color name="blue">#0000FF</color>
 </resources>

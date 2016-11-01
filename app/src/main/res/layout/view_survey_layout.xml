@@ -22,7 +22,7 @@
         android:elevation="2dp"
         android:text="Hello World"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textColor="@color/textColor" />
+        android:textColor="@color/blue" />
 
     <include layout="@layout/edit_question_buttons" />
 

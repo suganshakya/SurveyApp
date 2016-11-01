@@ -15,7 +15,6 @@ import survey.shakya.sugan.surveyapp.R;
 import survey.shakya.sugan.surveyapp.data.DataHelper;
 import survey.shakya.sugan.surveyapp.model.Question;
 import survey.shakya.sugan.surveyapp.model.Response;
-import survey.shakya.sugan.surveyapp.model.Survey;
 import survey.shakya.sugan.surveyapp.model.User;
 
 /**
@@ -26,17 +25,18 @@ public class ResponseAdapter extends BaseAdapter {
     private static final int TYPE_COUNT = 1;
     private Context context;
     List<Response> responseList = new ArrayList<>();
-    User user;
-    boolean isByUser;
+    boolean isBySurveyee;
+    int id;     // either question-id or surveyee-id as per isBySurvey
 
-    public ResponseAdapter(Context context, boolean isByUser,  User user, int questionId) {
+    public ResponseAdapter(Context context, boolean isBySurveyee,  int id) {
         this.context = context;
-        this.user = user;
+        this.isBySurveyee = isBySurveyee;
+        this.id = id;
         DataHelper helper = DataHelper.getInstance(this.context);
-        if(isByUser) {
-            responseList = helper.getResponseListBySurveyee(user.getId());
+        if(isBySurveyee) {
+            responseList = helper.getResponseListBySurveyee(id);
         } else {
-            responseList = helper.getResponseListByQuestion(questionId);
+            responseList = helper.getResponseListByQuestion(id);
         }
     }
 
@@ -80,16 +80,16 @@ public class ResponseAdapter extends BaseAdapter {
             TextView responseIdTV = (TextView) view.findViewById(R.id.text_view_response_id);
             responseIdTV.setText(response.getId() + "");
             TextView referenceTV = (TextView) view.findViewById(R.id.text_view_question_or_surveyee_name);
-            if(isByUser) {
+            if(isBySurveyee) {
+                // TODO
+                Question question = dataHelper.getQuestion(id);
+                referenceTV.setText("Question: " + question.getQuestion());
+            } else {
                 User user = dataHelper.getUser(response.getSurveyeeId());
                 referenceTV.setText("Surveyee: " + user.getFirstName() + " " + user.getLastName());
-            } else {
-                Question question = dataHelper.getQuestion(response.getQuestionId());
-                referenceTV.setText("Question: " + question.getQuestion());
             }
             TextView responseTextTV = (TextView) view.findViewById(R.id.text_view_response_text1);
             responseTextTV.setText(response.getResponse());
-
         }
         return view;
     }

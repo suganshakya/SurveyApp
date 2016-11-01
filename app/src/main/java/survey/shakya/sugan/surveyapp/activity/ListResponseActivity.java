@@ -17,6 +17,7 @@ import survey.shakya.sugan.surveyapp.adapter.ResponseAdapter;
 public class ListResponseActivity extends AppCompatActivity {
     private static String TAG = ListResponseActivity.class.getName();
     int questionId;
+    int surveyeeId;
     BaseAdapter responseAdapter;
     ListView listView;
 
@@ -38,12 +39,18 @@ public class ListResponseActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         questionId = intent.getIntExtra("QUESTION_ID", -1);
-        if (questionId == -1) {
-            Toast.makeText(getApplicationContext(), "Invalid Question ID", Toast.LENGTH_SHORT).show();
+        surveyeeId = intent.getIntExtra("SURVEYEE_ID", -1);
+        boolean isBySurveyee = true;  // true = by survey and false = by question
+        if(surveyeeId != -1 && questionId == -1){
+            // TODO
+//            responseAdapter = new ResponseAdapter(getApplicationContext(), isBySurvey, surveyId);
+        } else if (surveyeeId == -1 && questionId != -1){
+            isBySurveyee = false;
+            responseAdapter = new ResponseAdapter(getApplicationContext(), isBySurveyee, questionId);
+        } else {
+            Toast.makeText(getApplicationContext(), "Invalid Question ID / Survey ID", Toast.LENGTH_SHORT).show();
             return;
         }
-        boolean isByUser = false;
-        responseAdapter = new ResponseAdapter(getApplicationContext(), isByUser, null, questionId);
 
         listView = (ListView) findViewById(R.id.list_view_response_by_question);
         listView.setAdapter(responseAdapter);

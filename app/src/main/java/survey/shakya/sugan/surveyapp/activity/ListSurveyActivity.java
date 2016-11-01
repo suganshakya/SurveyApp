@@ -100,4 +100,11 @@ public class ListSurveyActivity extends AppCompatActivity {
         intent.putExtra("SURVEY_ID", surveyId);
         ListSurveyActivity.this.startActivity(intent);
     }
+
+    public void startListResponseActivity(int surveyId){
+        Intent intent = new Intent(ListSurveyActivity.this, ListResponseActivity.class);
+        intent.putExtra("QUESTION_ID", -1);
+        intent.putExtra("SURVEY_ID", surveyId);
+        ListSurveyActivity.this.startActivity(intent);
+    }
 }

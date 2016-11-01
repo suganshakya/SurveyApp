@@ -19,6 +19,7 @@ import survey.shakya.sugan.surveyapp.model.User;
 public class DataHelper extends SQLiteOpenHelper {
     private static DataHelper instance;
     private static String TAG = DataHelper.class.getName();
+    private static final String COMMA = ",";
 
     private DataHelper(Context context) {
         super(context, SurveyData.DATABASE, null, SurveyData.DATABASE_VERSION);
@@ -60,8 +61,9 @@ public class DataHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + SurveyData.RESPONSE_TABLE + " ( " +
                 SurveyData.RESPONSE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 SurveyData.RESPONSE_COL_RESPONSE + " TEXT NOT NULL, " +
-                SurveyData.RESPONSE_COL_SURVEYEE + " INTEGER, " +
                 SurveyData.RESPONSE_COL_QUESTION + " INTEGER, " +
+                SurveyData.RESPONSE_COL_SURVEYEE + " INTEGER, " +
+                "UNIQUE (" + SurveyData.RESPONSE_COL_QUESTION + COMMA + SurveyData.RESPONSE_COL_SURVEYEE + "), " +
                 "FOREIGN KEY (" + SurveyData.RESPONSE_COL_SURVEYEE + ") REFERENCES " + SurveyData.USER_TABLE + "(" + SurveyData.USER_COL_ID + "), " +
                 "FOREIGN KEY (" + SurveyData.RESPONSE_COL_QUESTION + ") REFERENCES " + SurveyData.QUESTION_TABLE + "(" + SurveyData.QUESTION_COL_ID + "))");
     }
@@ -321,6 +323,9 @@ public class DataHelper extends SQLiteOpenHelper {
     }
 
 
+
+
+
     // UPDATE
     public int updateUser(int id, User user) {
         SQLiteDatabase db = getWritableDatabase();
@@ -362,6 +367,21 @@ public class DataHelper extends SQLiteOpenHelper {
                         "WHERE " + SurveyData.QUESTION_COL_ID + " = ?",
                 new String[]{question.getQuestion(), question.getType(),
                         question.getOptions(), "" + question.getSurveyId(), "" + id});
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
+    public int replaceResponse(Response response) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        String replaceSql = "INSERT OR REPLACE INTO " + SurveyData.RESPONSE_TABLE + " (" +
+                SurveyData.RESPONSE_COL_ID + COMMA + SurveyData.RESPONSE_COL_RESPONSE + COMMA +
+                SurveyData.RESPONSE_COL_QUESTION + COMMA + SurveyData.RESPONSE_COL_SURVEYEE + ") VALUES";
+        Cursor cursor = db.rawQuery(replaceSql + " ((SELECT " + SurveyData.RESPONSE_COL_ID + " FROM " + SurveyData.RESPONSE_TABLE +
+                        " WHERE " + SurveyData.QUESTION_COL_QUESTION + " = ? AND " + SurveyData.RESPONSE_COL_SURVEYEE + " = ?), ?, ?, ?)",
+                new String[]{"" + response.getQuestionId(), "" + response.getSurveyeeId(), response.getResponse(), "" +
+                        response.getQuestionId(), "" + response.getSurveyeeId()});
         int count = cursor.getCount();
         cursor.close();
         return count;

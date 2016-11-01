@@ -110,6 +110,7 @@ public class ListQuestionActivity extends AppCompatActivity {
     public void startListResponseActivity(int questionId){
         Intent intent = new Intent(ListQuestionActivity.this, ListResponseActivity.class);
         intent.putExtra("QUESTION_ID", questionId);
+        intent.putExtra("SURVEYEE_ID", -1);
         ListQuestionActivity.this.startActivity(intent);
     }
 
@@ -122,6 +123,7 @@ public class ListQuestionActivity extends AppCompatActivity {
             DataHelper dataHelper = DataHelper.getInstance(getApplicationContext());
             Question question = dataHelper.getQuestion(questionId);
             String responseText = null;
+
             switch (question.getType()){
                 case Question.FILL_IN_BLANK:
                     EditText editText = (EditText) currentView.findViewById(R.id.edit_text_question_response);
@@ -147,7 +149,10 @@ public class ListQuestionActivity extends AppCompatActivity {
 
             Response response = new Response(userId, questionId, responseText);
 
-            long result = dataHelper.insertResponse(response);
+//            long result = dataHelper.insertResponse(response);
+            long result = dataHelper.replaceResponse(response);
+
+
             if(result == -1) {
                 Snackbar.make(view, "Error: inserting a response", Snackbar.LENGTH_LONG).show();
                 Log.e(TAG, "Error: inserting a response in database.");
