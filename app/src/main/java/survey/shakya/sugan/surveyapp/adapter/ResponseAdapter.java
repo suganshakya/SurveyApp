@@ -70,7 +70,7 @@ public class ResponseAdapter extends BaseAdapter {
                 Toast.makeText(context, "No Survey Found in Database.", Toast.LENGTH_SHORT).show();
                 return view;
             }
-            DataHelper dataHelper = DataHelper.getInstance(context);
+
 
             Response response = responseList.get(position);
             LayoutInflater layoutInflater = (LayoutInflater) parent.getContext()
@@ -82,9 +82,11 @@ public class ResponseAdapter extends BaseAdapter {
             TextView referenceTV = (TextView) view.findViewById(R.id.text_view_question_or_surveyee_name);
             if(isBySurveyee) {
                 // TODO
+                DataHelper dataHelper = DataHelper.getInstance(context);
                 Question question = dataHelper.getQuestion(id);
                 referenceTV.setText("Question: " + question.getQuestion());
             } else {
+                DataHelper dataHelper = DataHelper.getInstance(context);
                 User user = dataHelper.getUser(response.getSurveyeeId());
                 referenceTV.setText("Surveyee: " + user.getName());
             }

@@ -22,7 +22,7 @@ public class UpdateSurveyFragment extends DialogFragment {
     private int surveyId;
     private Survey survey;
 
-    DataHelper dataHelper;
+//    DataHelper dataHelper;
 
     public UpdateSurveyFragment() {
         // Required empty public constructor
@@ -57,7 +57,7 @@ public class UpdateSurveyFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        dataHelper = DataHelper.getInstance(getContext());
+        DataHelper dataHelper = DataHelper.getInstance(getContext());
         survey = dataHelper.getSurvey(surveyId);
 
         View view =  inflater.inflate(R.layout.fragment_update_survey, container, false);
@@ -79,6 +79,7 @@ public class UpdateSurveyFragment extends DialogFragment {
                     return;
                 }
                 Survey s = new Survey(name, survey.getSurveyerId());
+                DataHelper dataHelper = DataHelper.getInstance(getContext());
                 long response =  dataHelper.updateSurvey(survey.getId(), s);
                 if(response == -1){
                     Snackbar.make(getView(), "Error: updating Survey", Snackbar.LENGTH_LONG).show();

@@ -12,6 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -26,8 +27,7 @@
             android:name=".activity.ListSurveyActivity"
             android:exported="true"
             android:label="@string/title_activity_list_survey"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".activity.ListQuestionActivity"
             android:exported="true"
@@ -41,7 +41,8 @@
         <activity
             android:name=".activity.TableActivity"
             android:label="@string/title_activity_table"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

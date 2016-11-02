@@ -190,6 +190,22 @@ public class DataHelper extends SQLiteOpenHelper {
         return surveyList;
     }
 
+    public List<String> getAllSurveyeeName() {
+        List<String> nameList = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.USER_TABLE + " WHERE " +
+                SurveyData.USER_COL_TYPE + " = ?", new String[]{"SURVEYEE"});
+        if (cursor.moveToFirst()) {
+            nameList = new ArrayList<>();
+            do {
+                nameList.add(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_FIRSTNAME)) + " " +
+                                cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_LASTNAME)));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return nameList;
+    }
+
     public Question getQuestion(int questionId) {
         Question question = null;
         SQLiteDatabase db = getReadableDatabase();

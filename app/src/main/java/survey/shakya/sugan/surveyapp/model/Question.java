@@ -68,13 +68,18 @@ public class Question {
     }
 
     @Override
-    public String toString() {
-        return "Question{" +
-                "id=" + id +
-                ", question='" + question + '\'' +
-                ", type='" + type + '\'' +
-                ", options='" + options + '\'' +
-                ", surveyId=" + surveyId +
-                '}';
+    public String toString(){
+        return question;
     }
+
+//    @Override
+//    public String toString() {
+//        return "Question{" +
+//                "id=" + id +
+//                ", question='" + question + '\'' +
+//                ", type='" + type + '\'' +
+//                ", options='" + options + '\'' +
+//                ", surveyId=" + surveyId +
+//                '}';
+//    }
 }

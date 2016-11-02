@@ -120,6 +120,7 @@ public class ListQuestionActivity extends AppCompatActivity {
             View currentView = listView.getChildAt(i);
             TextView questionIdTV = (TextView) currentView.findViewById(R.id.text_view_question_id);
             int questionId = Integer.parseInt(questionIdTV.getText().toString());
+
             DataHelper dataHelper = DataHelper.getInstance(getApplicationContext());
             Question question = dataHelper.getQuestion(questionId);
             String responseText = null;
@@ -148,8 +149,8 @@ public class ListQuestionActivity extends AppCompatActivity {
             }
 
             Response response = new Response(userId, questionId, responseText);
-
-            long result = dataHelper.replaceResponse(response);
+            DataHelper dataHelper1 = DataHelper.getInstance(getApplicationContext());
+            long result = dataHelper1.replaceResponse(response);
 
             if(result == -1) {
                 Snackbar.make(view, "Error: inserting a response", Snackbar.LENGTH_LONG).show();

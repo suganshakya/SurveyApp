@@ -48,7 +48,6 @@ public class ListSurveyActivity extends AppCompatActivity {
         DataHelper dataHelper = DataHelper.getInstance(getApplicationContext());
         user = dataHelper.getUser(userId);
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         if (user.getUserType() == User.UserType.SURVEYEE) {
@@ -66,8 +65,6 @@ public class ListSurveyActivity extends AppCompatActivity {
         textView.setText(user.getUserTypeString() + " : " + user.getName());
 
         surveyAdapter = new SurveyAdapter(this, getApplicationContext(), user);
-
-
         if (surveyAdapter == null) {    // TODO: redundant code --- check it
             Toast.makeText(getApplicationContext(), "No Survey Found for userId - " + userId, Toast.LENGTH_SHORT).show();
             return;
@@ -117,7 +114,7 @@ public class ListSurveyActivity extends AppCompatActivity {
     protected void onResume() {
         Log.i(TAG, "List of Survey Resumed.");
         super.onResume();
-        surveyAdapter.updateData();
+//        surveyAdapter.updateData();
     }
 
     public void showCreateSurveyDialog() {       // Only for Surveyer

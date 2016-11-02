@@ -162,7 +162,8 @@ public class MainActivity extends AppCompatActivity {
         userType = User.UserType.valueOf(selectedRadioButton.getText().toString().toUpperCase());
 
         user = new User(firstName, lastName, username1, password1, userType);
-        dataHelper.insertUser(user);
+        DataHelper dataHelper1 = DataHelper.getInstance(getApplicationContext());
+        dataHelper1.insertUser(user);
         Toast.makeText(getApplicationContext(), "Register Successful for User - " + username1 + " as " + userType.name(), Toast.LENGTH_LONG).show();
     }
 }

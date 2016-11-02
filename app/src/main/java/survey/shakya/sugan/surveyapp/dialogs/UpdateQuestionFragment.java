@@ -22,7 +22,7 @@ public class UpdateQuestionFragment extends DialogFragment {
     private int questionId;
     private Question question;
 
-    DataHelper dataHelper;
+//    DataHelper dataHelper;
 
     public UpdateQuestionFragment() {
         // Required empty public constructor
@@ -57,8 +57,7 @@ public class UpdateQuestionFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        dataHelper = DataHelper.getInstance(getContext());
-
+        DataHelper dataHelper = DataHelper.getInstance(getContext());
         question = dataHelper.getQuestion(questionId);
         View view = inflater.inflate(R.layout.fragment_update_question, container, false);
         Dialog dialog= getDialog();
@@ -101,7 +100,7 @@ public class UpdateQuestionFragment extends DialogFragment {
                 }
                 q.setOptions(options);
                 q.setSurveyId(question.getSurveyId());
-
+                DataHelper dataHelper = DataHelper.getInstance(getContext());
                 long result = dataHelper.updateQuestion(question.getId(), q);
                 if(result == -1){
                     Toast.makeText(getContext(), "Error updating the question", Toast.LENGTH_SHORT).show();
