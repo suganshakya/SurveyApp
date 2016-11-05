@@ -123,6 +123,8 @@ public class ListQuestionActivity extends AppCompatActivity {
 
             DataHelper dataHelper = DataHelper.getInstance(getApplicationContext());
             Question question = dataHelper.getQuestion(questionId);
+            dataHelper.close();
+
             String responseText = null;
 
             switch (question.getType()){
@@ -149,8 +151,10 @@ public class ListQuestionActivity extends AppCompatActivity {
             }
 
             Response response = new Response(userId, questionId, responseText);
-            DataHelper dataHelper1 = DataHelper.getInstance(getApplicationContext());
-            long result = dataHelper1.replaceResponse(response);
+
+            dataHelper = DataHelper.getInstance(getApplicationContext());
+            long result = dataHelper.replaceResponse(response);
+            dataHelper.close();
 
             if(result == -1) {
                 Snackbar.make(view, "Error: inserting a response", Snackbar.LENGTH_LONG).show();

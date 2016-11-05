@@ -27,7 +27,7 @@ public class DataHelper extends SQLiteOpenHelper {
 
     public static synchronized DataHelper getInstance(Context context) {
         if (instance == null) {
-            instance = new DataHelper(context.getApplicationContext());
+            instance = new DataHelper(context);
         }
         return instance;
     }
@@ -47,8 +47,8 @@ public class DataHelper extends SQLiteOpenHelper {
                 SurveyData.SURVEY_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 SurveyData.SURVEY_COL_NAME + " TEXT NOT NULL, " +
                 SurveyData.SURVEY_COL_SURVEYER + " INTEGER, " +
-                "UNIQUE (" + SurveyData.SURVEY_COL_NAME + "," + SurveyData.SURVEY_COL_SURVEYER + "), " +
-                "FOREIGN KEY (" + SurveyData.SURVEY_COL_SURVEYER + ") REFERENCES " + SurveyData.USER_TABLE + "(" + SurveyData.USER_COL_ID + "))");
+                "FOREIGN KEY (" + SurveyData.SURVEY_COL_SURVEYER + ") REFERENCES " + SurveyData.USER_TABLE + "(" + SurveyData.USER_COL_ID + "), " +
+                "UNIQUE (" + SurveyData.SURVEY_COL_NAME + "," + SurveyData.SURVEY_COL_SURVEYER + "))");
 
         db.execSQL("CREATE TABLE " + SurveyData.QUESTION_TABLE + " ( " +
                 SurveyData.QUESTION_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -56,16 +56,16 @@ public class DataHelper extends SQLiteOpenHelper {
                 SurveyData.QUESTION_COL_TYPE + " TEXT NOT NULL, " +
                 SurveyData.QUESTION_COL_OPTIONS + " TEXT, " +
                 SurveyData.QUESTION_COL_SURVEY + " INTEGER, " +
-                 "FOREIGN KEY (" + SurveyData.QUESTION_COL_SURVEY + ") REFERENCES " + SurveyData.SURVEY_TABLE + "(" + SurveyData.QUESTION_COL_ID + "))");
+                "FOREIGN KEY (" + SurveyData.QUESTION_COL_SURVEY + ") REFERENCES " + SurveyData.SURVEY_TABLE + "(" + SurveyData.QUESTION_COL_ID + "))");
 
         db.execSQL("CREATE TABLE " + SurveyData.RESPONSE_TABLE + " ( " +
                 SurveyData.RESPONSE_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 SurveyData.RESPONSE_COL_RESPONSE + " TEXT NOT NULL, " +
                 SurveyData.RESPONSE_COL_QUESTION + " INTEGER, " +
                 SurveyData.RESPONSE_COL_SURVEYEE + " INTEGER, " +
-                "UNIQUE (" + SurveyData.RESPONSE_COL_QUESTION + COMMA + SurveyData.RESPONSE_COL_SURVEYEE + "), " +
                 "FOREIGN KEY (" + SurveyData.RESPONSE_COL_SURVEYEE + ") REFERENCES " + SurveyData.USER_TABLE + "(" + SurveyData.USER_COL_ID + "), " +
-                "FOREIGN KEY (" + SurveyData.RESPONSE_COL_QUESTION + ") REFERENCES " + SurveyData.QUESTION_TABLE + "(" + SurveyData.QUESTION_COL_ID + "))");
+                "FOREIGN KEY (" + SurveyData.RESPONSE_COL_QUESTION + ") REFERENCES " + SurveyData.QUESTION_TABLE + "(" + SurveyData.QUESTION_COL_ID + "), " +
+                "UNIQUE (" + SurveyData.RESPONSE_COL_QUESTION + COMMA + SurveyData.RESPONSE_COL_SURVEYEE + "))");
     }
 
     @Override
@@ -88,6 +88,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public User getUser(String username) {
         User user = null;
         SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.USER_TABLE + " WHERE LOWER(" +
                 SurveyData.USER_COL_USERNAME + ") = ?", new String[]{username.toLowerCase()});
         if (cursor.moveToFirst()) {
@@ -100,12 +101,16 @@ public class DataHelper extends SQLiteOpenHelper {
             user.setUserType(User.UserType.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(SurveyData.USER_COL_TYPE))));
         }
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return user;
     }
 
     public User getUser(int id) {
         User user = null;
         SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.USER_TABLE + " WHERE " +
                 SurveyData.USER_COL_ID + " = ?", new String[]{"" + id});
         if (cursor.moveToFirst()) {
@@ -118,12 +123,15 @@ public class DataHelper extends SQLiteOpenHelper {
             user.setUserType(User.UserType.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(SurveyData.USER_COL_TYPE))));
         }
         cursor.close();
+        db.endTransaction();
+        db.close();
         return user;
     }
 
     public Survey getSurvey(int surveyId) {
         Survey survey = null;
         SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.SURVEY_TABLE + " WHERE " +
                 SurveyData.SURVEY_COL_ID + " = ?", new String[]{""+surveyId});
         if (cursor.moveToFirst()) {
@@ -133,6 +141,9 @@ public class DataHelper extends SQLiteOpenHelper {
             survey.setSurveyerId(cursor.getInt(cursor.getColumnIndex(SurveyData.SURVEY_COL_SURVEYER)));
         }
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return survey;
     }
 
@@ -156,6 +167,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public List<Survey> getSurveyList(int surveyerId) {
         List<Survey> surveyList = null;
         SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.SURVEY_TABLE + " WHERE " +
                 SurveyData.SURVEY_COL_SURVEYER + " = ?", new String[]{"" + surveyerId});
         if (cursor.moveToFirst()) {
@@ -169,12 +181,16 @@ public class DataHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return surveyList;
     }
 
     public List<Survey> getAllSurveys() {
         List<Survey> surveyList = null;
         SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.SURVEY_TABLE, null);
         if (cursor.moveToFirst()) {
             surveyList = new ArrayList<>();
@@ -187,6 +203,9 @@ public class DataHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return surveyList;
     }
 
@@ -209,6 +228,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public Question getQuestion(int questionId) {
         Question question = null;
         SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.QUESTION_TABLE + " WHERE " +
                 SurveyData.QUESTION_COL_ID + " = ?", new String[]{""+questionId});
         if (cursor.moveToFirst()) {
@@ -220,12 +240,16 @@ public class DataHelper extends SQLiteOpenHelper {
             question.setSurveyId(cursor.getInt(cursor.getColumnIndexOrThrow(SurveyData.QUESTION_COL_SURVEY)));
         }
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return question;
     }
 
     public List<Question> getQuestionList(int surveyId) {
         List<Question> questionList = null;
         SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.QUESTION_TABLE + " WHERE " +
                 SurveyData.QUESTION_COL_SURVEY + " = ?", new String[]{"" + surveyId});
         if (cursor.moveToFirst()) {
@@ -241,12 +265,16 @@ public class DataHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return questionList;
     }
 
     public List<Response> getResponseListBySurveyee(int surveyeeId) {
         List<Response> responseList = null;
         SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.RESPONSE_TABLE + " WHERE " +
                 SurveyData.RESPONSE_COL_SURVEYEE + " = ?", new String[]{"" + surveyeeId});
         if (cursor.moveToFirst()) {
@@ -260,12 +288,17 @@ public class DataHelper extends SQLiteOpenHelper {
                 responseList.add(response);
             } while (cursor.moveToNext());
         }
+        cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return responseList;
     }
 
     public List<Response> getResponseListByQuestion(int questionId) {
         List<Response> responseList = null;
         SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.RESPONSE_TABLE + " WHERE " +
                 SurveyData.RESPONSE_COL_QUESTION + " = ?", new String[]{"" + questionId});
         if (cursor.moveToFirst()) {
@@ -279,12 +312,17 @@ public class DataHelper extends SQLiteOpenHelper {
                 responseList.add(response);
             } while (cursor.moveToNext());
         }
+        cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return responseList;
     }
 
     public Response getResponse(int surveyeeId, int questionId) {
         Response response = null;
         SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.RESPONSE_TABLE + " WHERE " +
                         SurveyData.RESPONSE_COL_QUESTION + " = ? AND " + SurveyData.RESPONSE_COL_SURVEYEE + " = ?",
                 new String[]{"" + questionId, "" + surveyeeId});
@@ -295,6 +333,10 @@ public class DataHelper extends SQLiteOpenHelper {
             response.setSurveyeeId(cursor.getInt(cursor.getColumnIndex(SurveyData.RESPONSE_COL_SURVEYEE)));
             response.setResponse(cursor.getString(cursor.getColumnIndex(SurveyData.RESPONSE_COL_RESPONSE)));
         }
+        cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return response;
     }
 
@@ -355,10 +397,6 @@ public class DataHelper extends SQLiteOpenHelper {
         return value;
     }
 
-
-
-
-
     // UPDATE
     public int updateUser(int id, User user) {
         SQLiteDatabase db = getWritableDatabase();
@@ -373,6 +411,8 @@ public class DataHelper extends SQLiteOpenHelper {
                 new String[]{user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getUserTypeString(), "" + id});
         int count = cursor.getCount();
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
         return count;
     }
 
@@ -386,6 +426,8 @@ public class DataHelper extends SQLiteOpenHelper {
                 new String[]{survey.getName(), "" + survey.getSurveyerId(), "" + id});
         int count = cursor.getCount();
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
         return count;
     }
 
@@ -402,6 +444,9 @@ public class DataHelper extends SQLiteOpenHelper {
                         question.getOptions(), "" + question.getSurveyId(), "" + id});
         int count = cursor.getCount();
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return count;
     }
 
@@ -417,6 +462,9 @@ public class DataHelper extends SQLiteOpenHelper {
                         response.getQuestionId(), "" + response.getSurveyeeId()});
         int count = cursor.getCount();
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return count;
     }
 
@@ -432,35 +480,50 @@ public class DataHelper extends SQLiteOpenHelper {
                         response.getQuestionId(), "" + id});
         int count = cursor.getCount();
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return count;
     }
 
     // DELETE
     public void deleteUser(int id) {
         SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         db.execSQL("DELETE FROM " + SurveyData.USER_TABLE +
                 " WHERE " + SurveyData.USER_COL_ID + " = " + id);
+        db.setTransactionSuccessful();
+        db.endTransaction();
         db.close();
     }
 
     public void deleteSurvey(int id) {
         SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         db.execSQL("DELETE FROM " + SurveyData.SURVEY_TABLE +
                 " WHERE " + SurveyData.SURVEY_COL_ID + " = " + id);
+        db.setTransactionSuccessful();
+        db.endTransaction();
         db.close();
     }
 
     public void deleteQuestion(int id) {
         SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         db.execSQL("DELETE FROM " + SurveyData.QUESTION_TABLE +
                         " WHERE " + SurveyData.QUESTION_COL_ID + " = " + id);
+        db.setTransactionSuccessful();
+        db.endTransaction();
         db.close();
     }
 
     public void deleteResponse(int id) {
         SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
         db.execSQL("DELETE FROM " + SurveyData.RESPONSE_TABLE +
                 " WHERE " + SurveyData.RESPONSE_COL_ID + " = " + id);
+        db.setTransactionSuccessful();
+        db.endTransaction();
         db.close();
     }
 
@@ -473,6 +536,9 @@ public class DataHelper extends SQLiteOpenHelper {
                 new String[]{surveyName,  "" + surveyerId });
         int count = cursor.getCount();
         cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
         return count == 1;
     }
 }
