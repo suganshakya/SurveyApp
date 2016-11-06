@@ -44,7 +44,7 @@ public class SurveyAdapter extends BaseAdapter {
         this.context = context;
         this.user = user;
         DataHelper helper = DataHelper.getInstance(this.context);
-        if(user.getUserType() == User.UserType.SURVEYER) {
+        if (user.getUserType() == User.UserType.SURVEYER) {
             surveyList = helper.getSurveyList(user.getId());
         } else {
             surveyList = helper.getAllSurveys();
@@ -53,7 +53,7 @@ public class SurveyAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if(surveyList == null){
+        if (surveyList == null) {
             return 0;
         }
         return surveyList.size();
@@ -61,7 +61,7 @@ public class SurveyAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        if(surveyList == null){
+        if (surveyList == null) {
             return null;
         }
         return surveyList.get(position);
@@ -81,34 +81,44 @@ public class SurveyAdapter extends BaseAdapter {
                 Toast.makeText(context, "No Survey Found in Database.", Toast.LENGTH_SHORT).show();
                 return view;
             }
-            final Survey survey = surveyList.get(position);
+
             LayoutInflater layoutInflater = (LayoutInflater) parent.getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.view_survey_layout, parent, false);
 
-            TextView surveyIdTV = (TextView) view.findViewById(R.id.text_view_survey_id);
-            surveyIdTV.setText("" + survey.getId());
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.surveyIdTV = (TextView) view.findViewById(R.id.text_view_survey_id);
+            viewHolder.surveyNameTV = (TextView) view.findViewById(R.id.text_view_survey_name);
 
-            TextView surveyNameTV = (TextView) view.findViewById(R.id.text_view_survey_name);
-            Spannable content = new SpannableString(survey.getName());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            surveyNameTV.setText(content);
+            viewHolder.editButton = (ImageButton) view.findViewById(R.id.edit_icon);
+            viewHolder.viewButton = (ImageButton) view.findViewById(R.id.view_icon);
+            viewHolder.deleteButton = (ImageButton) view.findViewById(R.id.delete_icon);
 
-            surveyNameTV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Edit Question
-                    if(activity instanceof ListSurveyActivity){
-                        ((ListSurveyActivity) activity).listQuestion(user.getId(), survey.getId());
-                    }
+            view.setTag(viewHolder);
+        }
+
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        final Survey survey = surveyList.get(position);
+
+        viewHolder.surveyIdTV.setText("" + survey.getId());
+
+        Spannable content = new SpannableString(survey.getName());  // To underline a text in textview
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        viewHolder.surveyNameTV.setText(content);
+
+        viewHolder.surveyNameTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Edit Question
+                if (activity instanceof ListSurveyActivity) {
+                    ((ListSurveyActivity) activity).listQuestion(user.getId(), survey.getId());
                 }
-            });
+            }
+        });
 
-
-        ImageButton editButton = (ImageButton) view.findViewById(R.id.edit_icon);
         if (user.getUserType() == User.UserType.SURVEYER) {
-            editButton.setVisibility(View.VISIBLE);
-            editButton.setOnClickListener(new View.OnClickListener() {
+            viewHolder.editButton.setVisibility(View.VISIBLE);
+            viewHolder.editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
@@ -124,27 +134,26 @@ public class SurveyAdapter extends BaseAdapter {
             });
 
         } else {
-            editButton.setVisibility(View.GONE);
+            viewHolder.editButton.setVisibility(View.GONE);
         }
 
-        ImageButton viewButton = (ImageButton) view.findViewById(R.id.view_icon);
         if (user.getUserType() == User.UserType.SURVEYER) {
-            viewButton.setVisibility(View.VISIBLE);
-            viewButton.setOnClickListener(new View.OnClickListener() {
+            viewHolder.viewButton.setVisibility(View.VISIBLE);
+            viewHolder.viewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(activity instanceof ListQuestionActivity){
+                    if (activity instanceof ListQuestionActivity) {
                         ((ListQuestionActivity) activity).startListResponseActivity(survey.getId());
-                    }                }
+                    }
+                }
             });
         } else {
-            viewButton.setVisibility(View.GONE);
+            viewHolder.viewButton.setVisibility(View.GONE);
         }
 
-        ImageButton deleteButton = (ImageButton) view.findViewById(R.id.delete_icon);
         if (user.getUserType() == User.UserType.SURVEYER) {
-            deleteButton.setVisibility(View.VISIBLE);
-            deleteButton.setOnClickListener(new View.OnClickListener() {
+            viewHolder.deleteButton.setVisibility(View.VISIBLE);
+            viewHolder.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     DataHelper dataHelper = DataHelper.getInstance(context);
@@ -153,9 +162,8 @@ public class SurveyAdapter extends BaseAdapter {
                 }
             });
         } else {
-            deleteButton.setVisibility(View.GONE);
+            viewHolder.deleteButton.setVisibility(View.GONE);
         }
-    }
         return view;
     }
 
@@ -164,13 +172,22 @@ public class SurveyAdapter extends BaseAdapter {
         return TYPE_COUNT;
     }
 
-    public void updateData(){
+    public void updateData() {
         DataHelper helper = DataHelper.getInstance(this.context);
-        if(user.getUserType() == User.UserType.SURVEYER) {
+        if (user.getUserType() == User.UserType.SURVEYER) {
             surveyList = helper.getSurveyList(user.getId());
         } else {
             surveyList = helper.getAllSurveys();
         }
         this.notifyDataSetChanged();
+    }
+
+    private static class ViewHolder {
+        public TextView surveyIdTV;
+        public TextView surveyNameTV;
+
+        public ImageButton viewButton;
+        public ImageButton editButton;
+        public ImageButton deleteButton;
     }
 }
