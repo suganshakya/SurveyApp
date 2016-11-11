@@ -42,8 +42,8 @@ public class ListResponseActivity extends AppCompatActivity {
         surveyeeId = intent.getIntExtra("SURVEYEE_ID", -1);
         boolean isBySurveyee = true;  // true = by survey and false = by question
         if(surveyeeId != -1 && questionId == -1){
-            // TODO
-//            responseAdapter = new ResponseAdapter(getApplicationContext(), isBySurvey, surveyId);
+            Toast.makeText(getApplicationContext(), "Error!!!", Toast.LENGTH_SHORT).show();
+
         } else if (surveyeeId == -1 && questionId != -1){
             isBySurveyee = false;
             responseAdapter = new ResponseAdapter(getApplicationContext(), isBySurveyee, questionId);

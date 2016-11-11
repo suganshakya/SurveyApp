@@ -8,17 +8,17 @@ public class SurveyData {
     public static final String DATABASE = "survey.db";
     public static final int DATABASE_VERSION = 1;
 	// Name of the tables
-    public static final String USER_TABLE = "user";
-    public static final String SURVEY_TABLE = "survey";
-    public static final String QUESTION_TABLE = "question";
-    public static final String RESPONSE_TABLE = "response";
+    public static final String USER_TABLE = "user_table";
+    public static final String SURVEY_TABLE = "survey_table";
+    public static final String QUESTION_TABLE = "question_table";
+    public static final String RESPONSE_TABLE = "response_table";
 
     // User Table
     public static final String USER_COL_ID = "id";
     public static final String USER_COL_USERNAME = "username";
     public static final String USER_COL_PASSWORD = "password";
-    public static final String USER_COL_FIRSTNAME = "firstname";
-    public static final String USER_COL_LASTNAME = "lastname";
+    public static final String USER_COL_FIRSTNAME = "firstName";
+    public static final String USER_COL_LASTNAME = "lastName";
     public static final String USER_COL_TYPE = "type";
 
     public static final String SURVEY_COL_ID = "id";

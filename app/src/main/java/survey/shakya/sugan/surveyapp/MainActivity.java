@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "Login Success");
             Intent intent = new Intent(MainActivity.this, ListSurveyActivity.class);
             intent.putExtra("USER_ID", user.getId());
+            passwordET.setText("");
             MainActivity.this.startActivity(intent);
         } else {
             Toast.makeText(getApplicationContext(), "Password did not match", Toast.LENGTH_SHORT).show();
@@ -164,6 +165,17 @@ public class MainActivity extends AppCompatActivity {
         user = new User(firstName, lastName, username1, password1, userType);
         DataHelper dataHelper1 = DataHelper.getInstance(getApplicationContext());
         dataHelper1.insertUser(user);
+
+        clearEditTexts();
+
         Toast.makeText(getApplicationContext(), "Register Successful for User - " + username1 + " as " + userType.name(), Toast.LENGTH_LONG).show();
+    }
+
+    private void clearEditTexts(){
+        firstNameET.setText("");
+        lastNameET.setText("");
+        usernameET1.setText("");
+        passwordET1.setText("");
+        passwordET2.setText("");
     }
 }

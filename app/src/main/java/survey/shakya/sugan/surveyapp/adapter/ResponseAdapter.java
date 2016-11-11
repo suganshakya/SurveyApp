@@ -81,7 +81,6 @@ public class ResponseAdapter extends BaseAdapter {
             responseIdTV.setText(response.getId() + "");
             TextView referenceTV = (TextView) view.findViewById(R.id.text_view_question_or_surveyee_name);
             if(isBySurveyee) {
-                // TODO
                 DataHelper dataHelper = DataHelper.getInstance(context);
                 Question question = dataHelper.getQuestion(id);
                 referenceTV.setText("Question: " + question.getQuestion());

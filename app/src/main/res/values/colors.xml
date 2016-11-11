@@ -12,4 +12,6 @@
     <color name="blue">#0000FF</color>
     <color name="buttonColor">#F0F0F0</color>
     <color name="colorTableRowHead">#EEEEEE</color>
+    <color name="colorTableRowEven">#F5F5F5</color>
+    <color name="colorTableRowOdd">#F0F0F0</color>
 </resources>

@@ -19,7 +19,7 @@ import survey.shakya.sugan.surveyapp.model.User;
 public class DataHelper extends SQLiteOpenHelper {
     private static DataHelper instance;
     private static String TAG = DataHelper.class.getName();
-    private static final String COMMA = ",";
+    private static final String COMMA = ", ";
 
     private DataHelper(Context context) {
         super(context, SurveyData.DATABASE, null, SurveyData.DATABASE_VERSION);
@@ -209,6 +209,32 @@ public class DataHelper extends SQLiteOpenHelper {
         return surveyList;
     }
 
+    public List<User> getAllSurveyee() {
+        List<User> surveyeeList = null;
+        SQLiteDatabase db = getReadableDatabase();
+        db.beginTransaction();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SurveyData.USER_TABLE + " WHERE " +
+                SurveyData.USER_COL_TYPE + " = ?", new String[]{"SURVEYEE"});
+        if (cursor.moveToFirst()) {
+            surveyeeList = new ArrayList<>();
+            do {
+                User surveyee = new User();
+                surveyee.setId(cursor.getInt(cursor.getColumnIndex(SurveyData.USER_COL_ID)));
+                surveyee.setUserType(User.UserType.valueOf(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_TYPE))));
+                surveyee.setUsername(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_USERNAME)));
+                surveyee.setFirstName(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_FIRSTNAME)));
+                surveyee.setLastName(cursor.getString(cursor.getColumnIndex(SurveyData.USER_COL_LASTNAME)));
+
+                surveyeeList.add(surveyee);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+        return surveyeeList;
+    }
+
     public List<String> getAllSurveyeeName() {
         List<String> nameList = null;
         SQLiteDatabase db = getReadableDatabase();
@@ -383,20 +409,6 @@ public class DataHelper extends SQLiteOpenHelper {
         return value;
     }
 
-    public long insertResponse(Response response) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(SurveyData.RESPONSE_COL_RESPONSE, response.getResponse());
-        contentValues.put(SurveyData.RESPONSE_COL_QUESTION, response.getQuestionId());
-        contentValues.put(SurveyData.RESPONSE_COL_SURVEYEE, response.getSurveyeeId());
-
-        long value = db.insertOrThrow(SurveyData.RESPONSE_TABLE, null, contentValues);
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        return value;
-    }
-
     // UPDATE
     public int updateUser(int id, User user) {
         SQLiteDatabase db = getWritableDatabase();
@@ -455,29 +467,14 @@ public class DataHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         String replaceSql = "INSERT OR REPLACE INTO " + SurveyData.RESPONSE_TABLE + " (" +
                 SurveyData.RESPONSE_COL_ID + COMMA + SurveyData.RESPONSE_COL_RESPONSE + COMMA +
-                SurveyData.RESPONSE_COL_QUESTION + COMMA + SurveyData.RESPONSE_COL_SURVEYEE + ") VALUES";
-        Cursor cursor = db.rawQuery(replaceSql + " ((SELECT " + SurveyData.RESPONSE_COL_ID + " FROM " + SurveyData.RESPONSE_TABLE +
-                        " WHERE " + SurveyData.QUESTION_COL_QUESTION + " = ? AND " + SurveyData.RESPONSE_COL_SURVEYEE + " = ?), ?, ?, ?)",
+                SurveyData.RESPONSE_COL_QUESTION + COMMA + SurveyData.RESPONSE_COL_SURVEYEE + ") VALUES" +
+                " ((SELECT " + SurveyData.RESPONSE_COL_ID + " FROM " + SurveyData.RESPONSE_TABLE +
+                " WHERE " + SurveyData.RESPONSE_COL_QUESTION + " = ? AND " + SurveyData.RESPONSE_COL_SURVEYEE + " = ?), ?, ?, ?)";
+
+
+        Cursor cursor = db.rawQuery(replaceSql,
                 new String[]{"" + response.getQuestionId(), "" + response.getSurveyeeId(), response.getResponse(), "" +
                         response.getQuestionId(), "" + response.getSurveyeeId()});
-        int count = cursor.getCount();
-        cursor.close();
-        db.setTransactionSuccessful();
-        db.endTransaction();
-        db.close();
-        return count;
-    }
-
-    public int updateResponse(int id, Response response) {
-        SQLiteDatabase db = getWritableDatabase();
-        db.beginTransaction();
-        Cursor cursor = db.rawQuery("UPDATE " + SurveyData.RESPONSE_TABLE + " SET " +
-                        SurveyData.RESPONSE_COL_RESPONSE + " = ?, " +
-                        SurveyData.RESPONSE_COL_SURVEYEE + " = ? " +
-                        SurveyData.RESPONSE_COL_QUESTION + " = ? " +
-                        "WHERE " + SurveyData.RESPONSE_COL_ID + " = ?",
-                new String[]{response.getResponse(), "" + response.getSurveyeeId(), "" +
-                        response.getQuestionId(), "" + id});
         int count = cursor.getCount();
         cursor.close();
         db.setTransactionSuccessful();

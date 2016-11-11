@@ -1,5 +1,9 @@
 package survey.shakya.sugan.surveyapp.model;
 
+import android.content.Context;
+
+import survey.shakya.sugan.surveyapp.data.DataHelper;
+
 /**
  * Created by sugan on 28/09/16.
  */
@@ -11,13 +15,6 @@ public class Response {
     String response;
 
     public Response() {
-    }
-
-    public Response(int id, int surveyeeId, int questionId, String response) {
-        this.id = id;
-        this.surveyeeId = surveyeeId;
-        this.questionId = questionId;
-        this.response = response;
     }
 
     public Response(int surveyeeId, int questionId, String response) {
@@ -58,5 +55,30 @@ public class Response {
 
     public void setResponse(String response) {
         this.response = response;
+    }
+
+    public String getValue(Context context, String s) {
+        switch (s) {
+            case "Question ID":
+                return String.valueOf(questionId);
+
+            case "Question":
+                DataHelper dataHelper = DataHelper.getInstance(context);
+                Question question = dataHelper.getQuestion(questionId);
+                return question.getQuestion();
+
+            case "Surveyee ID":
+                return String.valueOf(surveyeeId);
+
+            case "Surveyee Name":
+                DataHelper dataHelper1 = DataHelper.getInstance(context);
+                User surveyee = dataHelper1.getUser(surveyeeId);
+                return surveyee.toString();
+
+            case "Response":
+                return response;
+            default:
+                return null;
+        }
     }
 }
