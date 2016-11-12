@@ -56,7 +56,11 @@ public class Question {
     }
 
     public void setOptions(String options) {
-        this.options = options;
+        if(options == null){
+            this.options = null;
+        } else {
+            this.options = options.trim().replaceAll("\\s*,\\s*", ",").replaceAll(",$", "");
+        }
     }
 
     public int getSurveyId() {
@@ -71,15 +75,4 @@ public class Question {
     public String toString(){
         return question;
     }
-
-//    @Override
-//    public String toString() {
-//        return "Question{" +
-//                "id=" + id +
-//                ", question='" + question + '\'' +
-//                ", type='" + type + '\'' +
-//                ", options='" + options + '\'' +
-//                ", surveyId=" + surveyId +
-//                '}';
-//    }
 }

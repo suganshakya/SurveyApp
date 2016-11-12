@@ -226,6 +226,10 @@ public class TableActivity extends AppCompatActivity {
 
         System.out.println(responseList);
 
+        if(responseList == null){
+            return;
+        }
+
         for (Response response : responseList) {
             TableRow tablerow = new TableRow(context);
             if (count % 2 == 0) {
