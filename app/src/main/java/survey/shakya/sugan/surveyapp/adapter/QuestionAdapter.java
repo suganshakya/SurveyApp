@@ -37,7 +37,7 @@ import survey.shakya.sugan.surveyapp.model.User;
 public class QuestionAdapter extends BaseAdapter {
     private static String TAG = QuestionAdapter.class.getName();
 
-    private static final int TYPE_COUNT = 5;
+    private static final int TYPE_COUNT = 4;
 
     private static final int FILL_TYPE = 1;
     private static final int TRUE_FALSE_TYPE = 2;
@@ -101,86 +101,91 @@ public class QuestionAdapter extends BaseAdapter {
                 return RADIO_TYPE;
             case SPINNER:
                 return SPINNER_TYPE;
+            default:
+                throw new RuntimeException("Unsupported Question Type.");
         }
-        return 0;
     }
 
     @Override
-    public View getView(int position, final View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         if (questionList == null) {
             Toast.makeText(context, "No Question Found for Survey", Toast.LENGTH_SHORT).show();
             return convertView;
         }
 
         Question question = questionList.get(position);
+        int type = this.getItemViewType(position);
 
-        int type = getItemViewType(position);
-        LayoutInflater layoutInflater = (LayoutInflater) parent.getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view;
         switch (type) {
             case FILL_TYPE:
-                view = convertView;
                 FillViewHolder fillViewHolder;
-                if (view == null) {
+                View view1 = convertView;
+                if (view1 == null) {
+                    LayoutInflater layoutInflater = (LayoutInflater) parent.getContext()
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    view1 = layoutInflater.inflate(R.layout.view_question_text_layout, parent, false);
+
                     fillViewHolder = new FillViewHolder();
-                    view = layoutInflater.inflate(R.layout.view_question_text_layout, parent, false);
-                    fillViewHolder.questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
-                    fillViewHolder.questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
-                    fillViewHolder.editButton = (ImageButton) view.findViewById(R.id.edit_icon);
-                    fillViewHolder.viewButton = (ImageButton) view.findViewById(R.id.view_icon);
-                    fillViewHolder.deleteButton = (ImageButton) view.findViewById(R.id.delete_icon);
-                    fillViewHolder.questionResponseEditText = (EditText) view.findViewById(R.id.edit_text_question_response);
-                    view.setTag(fillViewHolder);
+                    fillViewHolder.questionIdTextView = (TextView) view1.findViewById(R.id.text_view_question_id);
+                    fillViewHolder.questionQuestionTextView = (TextView) view1.findViewById(R.id.text_view_question_question);
+                    fillViewHolder.editButton = (ImageButton) view1.findViewById(R.id.edit_icon);
+                    fillViewHolder.viewButton = (ImageButton) view1.findViewById(R.id.view_icon);
+                    fillViewHolder.deleteButton = (ImageButton) view1.findViewById(R.id.delete_icon);
+                    fillViewHolder.questionResponseEditText = (EditText) view1.findViewById(R.id.edit_text_question_response);
+                    view1.setTag(fillViewHolder);
                 } else {
-                    fillViewHolder = (FillViewHolder) view.getTag();
+                    fillViewHolder = (FillViewHolder) view1.getTag();
                 }
                 fillViewHolder.setValues(question);
-                return view;
+                return view1;
 
             case TRUE_FALSE_TYPE:
-                view = convertView;
-
                 TrueFalseViewHolder trueFalseViewHolder;
-                if (view == null) {
-                    trueFalseViewHolder = new TrueFalseViewHolder();
-                    view = layoutInflater.inflate(R.layout.view_question_true_false_layout, parent, false);
-                    trueFalseViewHolder.questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
-                    trueFalseViewHolder.questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
-                    trueFalseViewHolder.editButton = (ImageButton) view.findViewById(R.id.edit_icon);
-                    trueFalseViewHolder.viewButton = (ImageButton) view.findViewById(R.id.view_icon);
-                    trueFalseViewHolder.deleteButton = (ImageButton) view.findViewById(R.id.delete_icon);
+                View view2 = convertView;
 
-                    trueFalseViewHolder.trueFalseGroup = (RadioGroup) view.findViewById(R.id.radio_group_true_false_response);
+                if (view2 == null) {
+                    LayoutInflater layoutInflater = (LayoutInflater) parent.getContext()
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    view2 = layoutInflater.inflate(R.layout.view_question_text_layout, parent, false);
+
+                    trueFalseViewHolder = new TrueFalseViewHolder();
+                    view2 = layoutInflater.inflate(R.layout.view_question_true_false_layout, parent, false);
+                    trueFalseViewHolder.questionIdTextView = (TextView) view2.findViewById(R.id.text_view_question_id);
+                    trueFalseViewHolder.questionQuestionTextView = (TextView) view2.findViewById(R.id.text_view_question_question);
+                    trueFalseViewHolder.editButton = (ImageButton) view2.findViewById(R.id.edit_icon);
+                    trueFalseViewHolder.viewButton = (ImageButton) view2.findViewById(R.id.view_icon);
+                    trueFalseViewHolder.deleteButton = (ImageButton) view2.findViewById(R.id.delete_icon);
+
+                    trueFalseViewHolder.trueFalseGroup = (RadioGroup) view2.findViewById(R.id.radio_group_true_false_response);
+                    trueFalseViewHolder.trueButton = (RadioButton) view2.findViewById(R.id.true_button);
+                    trueFalseViewHolder.falseButton = (RadioButton) view2.findViewById(R.id.false_button);
+
+                    view2.setTag(trueFalseViewHolder);
                 } else {
-                    trueFalseViewHolder = (TrueFalseViewHolder) view.getTag();
+                    trueFalseViewHolder = (TrueFalseViewHolder) view2.getTag();
                 }
 
                 trueFalseViewHolder.setValues(question);
-
-                String[] options = new String[]{"True", "False"};
-                RadioButton rb[] = new RadioButton[options.length];
-                rb[0] = (RadioButton) view.findViewById(R.id.true_button);
-                rb[1] = (RadioButton) view.findViewById(R.id.false_button);
-
-                for (int i = 0; i < options.length; ++i) {
-                    rb[i].setText(options[i]);
-                }
-                return view;
+                return view2;
 
             case RADIO_TYPE:
-                view = convertView;
-                RadioViewHolder radioViewHolder = new RadioViewHolder();
-                if (view == null) {
-                    view = layoutInflater.inflate(R.layout.view_question_radio_layout, parent, false);
-                    radioViewHolder.questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
-                    radioViewHolder.questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
-                    radioViewHolder.editButton = (ImageButton) view.findViewById(R.id.edit_icon);
-                    radioViewHolder.viewButton = (ImageButton) view.findViewById(R.id.view_icon);
-                    radioViewHolder.deleteButton = (ImageButton) view.findViewById(R.id.delete_icon);
-                    radioViewHolder.radioGroup = (RadioGroup) view.findViewById(R.id.radio_group_question_response);
+                RadioViewHolder radioViewHolder;
+                View view3 = convertView;
+                if (view3 == null) {
+                    LayoutInflater layoutInflater = (LayoutInflater) parent.getContext()
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    view3 = layoutInflater.inflate(R.layout.view_question_radio_layout, parent, false);
+                    radioViewHolder = new RadioViewHolder();
+                    radioViewHolder.questionIdTextView = (TextView) view3.findViewById(R.id.text_view_question_id);
+                    radioViewHolder.questionQuestionTextView = (TextView) view3.findViewById(R.id.text_view_question_question);
+                    radioViewHolder.editButton = (ImageButton) view3.findViewById(R.id.edit_icon);
+                    radioViewHolder.viewButton = (ImageButton) view3.findViewById(R.id.view_icon);
+                    radioViewHolder.deleteButton = (ImageButton) view3.findViewById(R.id.delete_icon);
+                    radioViewHolder.radioGroup = (RadioGroup) view3.findViewById(R.id.radio_group_question_response);
+
+                    view3.setTag(radioViewHolder);
                 } else {
-                    radioViewHolder = (RadioViewHolder) view.getTag();
+                    radioViewHolder = (RadioViewHolder) view3.getTag();
                 }
 
                 radioViewHolder.setValues(question);
@@ -194,22 +199,26 @@ public class QuestionAdapter extends BaseAdapter {
                     );
                 }
 
-                return view;
+                return view3;
             case SPINNER_TYPE:
-                view = convertView;
                 SpinnerViewHolder spinnerViewHolder;
-                if (view == null) {
+                View view4 = convertView;
+                if (view4 == null) {
+                    LayoutInflater layoutInflater = (LayoutInflater) parent.getContext()
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     spinnerViewHolder = new SpinnerViewHolder();
-                    view = layoutInflater.inflate(R.layout.view_question_spinner_layout, parent, false);
-                    spinnerViewHolder.questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
-                    spinnerViewHolder.questionQuestionTextView = (TextView) view.findViewById(R.id.text_view_question_question);
-                    spinnerViewHolder.editButton = (ImageButton) view.findViewById(R.id.edit_icon);
-                    spinnerViewHolder.viewButton = (ImageButton) view.findViewById(R.id.view_icon);
-                    spinnerViewHolder.deleteButton = (ImageButton) view.findViewById(R.id.delete_icon);
+                    view4 = layoutInflater.inflate(R.layout.view_question_spinner_layout, parent, false);
+                    spinnerViewHolder.questionIdTextView = (TextView) view4.findViewById(R.id.text_view_question_id);
+                    spinnerViewHolder.questionQuestionTextView = (TextView) view4.findViewById(R.id.text_view_question_question);
+                    spinnerViewHolder.editButton = (ImageButton) view4.findViewById(R.id.edit_icon);
+                    spinnerViewHolder.viewButton = (ImageButton) view4.findViewById(R.id.view_icon);
+                    spinnerViewHolder.deleteButton = (ImageButton) view4.findViewById(R.id.delete_icon);
 
-                    spinnerViewHolder.spinner = (Spinner) view.findViewById(R.id.spinner_question_response);
+                    spinnerViewHolder.spinner = (Spinner) view4.findViewById(R.id.spinner_question_response);
+
+                    view4.setTag(spinnerViewHolder);
                 } else {
-                    spinnerViewHolder = (SpinnerViewHolder) view.getTag();
+                    spinnerViewHolder = (SpinnerViewHolder) view4.getTag();
                 }
                 spinnerViewHolder.setValues(question);
                 String[] spinnerOptions = question.getOptions().split(",");
@@ -221,7 +230,7 @@ public class QuestionAdapter extends BaseAdapter {
                 spinnerViewHolder.spinner.setAdapter(dataAdapter);
                 spinnerViewHolder.spinner.setSelection(0);
 
-                return view;
+                return view4;
         }
         return convertView;
     }
@@ -302,6 +311,8 @@ public class QuestionAdapter extends BaseAdapter {
 
     private class TrueFalseViewHolder extends ViewHolder {
         RadioGroup trueFalseGroup;
+        RadioButton trueButton;
+        RadioButton falseButton;
     }
 
     private class SpinnerViewHolder extends ViewHolder {
