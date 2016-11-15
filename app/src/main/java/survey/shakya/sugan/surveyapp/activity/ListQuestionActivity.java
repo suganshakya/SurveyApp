@@ -132,7 +132,7 @@ public class ListQuestionActivity extends AppCompatActivity {
     private void performFileSearch(){
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");
+        intent.setType("*/*");      //  Android BUG ("*.csv|*.txt")
         startActivityForResult(intent, READ_REQUEST_CODE);
     }
 
