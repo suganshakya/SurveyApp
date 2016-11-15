@@ -19,7 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import survey.shakya.sugan.surveyapp.R;
 import survey.shakya.sugan.surveyapp.activity.ListQuestionActivity;
@@ -43,6 +45,9 @@ public class QuestionAdapter extends BaseAdapter {
     private int surveyId;
     private int userId;
     private User user;
+
+    private Map<Integer, Integer> resultMap1 = new HashMap<Integer, Integer>();
+    private Map<Integer, String> resultMap2 = new HashMap<Integer, String>();
 
     public QuestionAdapter(AppCompatActivity activity, Context context, int userId, int surveyId) {
         this.activity = activity;
@@ -93,7 +98,7 @@ public class QuestionAdapter extends BaseAdapter {
         TextView questionIdTextView;
         TextView questionQuestionTextView;
         switch (question.getType()) {
-            case Question.FILL_IN_BLANK:
+            case FILL_IN_THE_BLANK:
                 view = layoutInflater.inflate(R.layout.view_question_text_layout, parent, false);
                 questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
                 questionIdTextView.setText("" + question.getId());
@@ -103,7 +108,7 @@ public class QuestionAdapter extends BaseAdapter {
                 EditText questionResponseEditText = (EditText) view.findViewById(R.id.edit_text_question_response);
                 break;
 
-            case Question.TRUE_FALSE:
+            case TRUE_FALSE:
                 view = layoutInflater.inflate(R.layout.view_question_true_false_layout, parent, false);
 
                 questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
@@ -122,7 +127,7 @@ public class QuestionAdapter extends BaseAdapter {
                 }
                 break;
 
-            case Question.SPINNER:
+            case SPINNER:
                 view = layoutInflater.inflate(R.layout.view_question_spinner_layout, parent, false);
                 questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
                 questionIdTextView.setText("" + question.getId());
@@ -141,7 +146,7 @@ public class QuestionAdapter extends BaseAdapter {
                 spinner.setSelection(0);
                 break;
 
-            case Question.RADIO:
+            case RADIO:
                 view = layoutInflater.inflate(R.layout.view_question_radio_layout, parent, false);
                 questionIdTextView = (TextView) view.findViewById(R.id.text_view_question_id);
                 questionIdTextView.setText("" + question.getId());

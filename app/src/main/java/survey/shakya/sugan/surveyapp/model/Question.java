@@ -5,14 +5,29 @@ package survey.shakya.sugan.surveyapp.model;
  */
 
 public class Question {
-    public static final String FILL_IN_BLANK = "Fill in the blank";
-    public static final String TRUE_FALSE = "True/False";
-    public static final String SPINNER = "Spinner";
-    public static final String RADIO = "Radio";
+    public enum Type {
+        FILL_IN_THE_BLANK, TRUE_FALSE, RADIO, SPINNER;
+
+        public static Type fromString(String tradeType){
+
+            try{
+                return Type.valueOf(tradeType.replaceAll(" ", "_"));
+            }catch(IllegalArgumentException e){
+                throw new RuntimeException(tradeType + " is not supported question type");
+            }
+        }
+
+        @Override
+        public String toString(){
+            return super.toString().replaceAll("_", " ");
+        }
+    }
+
+
 
     int id;
     String question;
-    String type;
+    Type type;
     String options;
     int surveyId;
 
@@ -20,7 +35,7 @@ public class Question {
 
     }
 
-    public Question(String question, String type, String options, int surveyId) {
+    public Question(String question, Type type, String options, int surveyId) {
         this.question = question;
         this.type = type;
         this.options = options;
@@ -43,12 +58,16 @@ public class Question {
         this.question = question;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
+    }
+
+    public void setType(String typeStr){
+        this.type = Type.valueOf(typeStr.replace(" ", "_"));
     }
 
     public String getOptions() {

@@ -400,7 +400,7 @@ public class DataHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         ContentValues contentValues = new ContentValues();
         contentValues.put(SurveyData.QUESTION_COL_QUESTION, question.getQuestion());
-        contentValues.put(SurveyData.QUESTION_COL_TYPE, question.getType());
+        contentValues.put(SurveyData.QUESTION_COL_TYPE, question.getType().toString());
         contentValues.put(SurveyData.QUESTION_COL_OPTIONS, question.getOptions());
         contentValues.put(SurveyData.QUESTION_COL_SURVEY, question.getSurveyId());
         long value = db.insertOrThrow(SurveyData.QUESTION_TABLE, null, contentValues);
@@ -452,7 +452,7 @@ public class DataHelper extends SQLiteOpenHelper {
                         SurveyData.QUESTION_COL_OPTIONS + " = ?, " +
                         SurveyData.QUESTION_COL_SURVEY + " = ? " +
                         "WHERE " + SurveyData.QUESTION_COL_ID + " = ?",
-                new String[]{question.getQuestion(), question.getType(),
+                new String[]{question.getQuestion(), question.getType().toString(),
                         question.getOptions(), "" + question.getSurveyId(), "" + id});
         int count = cursor.getCount();
         cursor.close();

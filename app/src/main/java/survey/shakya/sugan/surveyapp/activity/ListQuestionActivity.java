@@ -41,6 +41,11 @@ import survey.shakya.sugan.surveyapp.model.Question;
 import survey.shakya.sugan.surveyapp.model.Response;
 import survey.shakya.sugan.surveyapp.model.User;
 
+import static survey.shakya.sugan.surveyapp.model.Question.Type.FILL_IN_THE_BLANK;
+import static survey.shakya.sugan.surveyapp.model.Question.Type.RADIO;
+import static survey.shakya.sugan.surveyapp.model.Question.Type.SPINNER;
+import static survey.shakya.sugan.surveyapp.model.Question.Type.TRUE_FALSE;
+
 public class ListQuestionActivity extends AppCompatActivity {
     private static String TAG = ListQuestionActivity.class.getName();
     int userId;
@@ -153,17 +158,17 @@ public class ListQuestionActivity extends AppCompatActivity {
                         question.setQuestion(words[0]);
                         String questionTypeHint = words[1].toLowerCase();
                         if(questionTypeHint.contains("fill")){
-                            question.setType(Question.FILL_IN_BLANK);
+                            question.setType(FILL_IN_THE_BLANK);
                             dataHelper.insertQuestion(question);
                             continue;
                         } else if (questionTypeHint.contains("true")){
-                            question.setType(Question.TRUE_FALSE);
+                            question.setType(TRUE_FALSE);
                             dataHelper.insertQuestion(question);
                             continue;
                         } else if (questionTypeHint.contains("radio")){
-                            question.setType(Question.RADIO);
+                            question.setType(RADIO);
                         } else if (questionTypeHint.contains("spin")) {
-                            question.setType(Question.SPINNER);
+                            question.setType(SPINNER);
                         } else {
                             Toast.makeText(getApplicationContext(), "Error settting question Type", Toast.LENGTH_LONG).show();
                             return;
@@ -224,14 +229,14 @@ public class ListQuestionActivity extends AppCompatActivity {
             String responseText = null;
 
             switch (question.getType()){
-                case Question.FILL_IN_BLANK:
+                case FILL_IN_THE_BLANK:
                     EditText editText = (EditText) currentView.findViewById(R.id.edit_text_question_response);
                     responseText = editText.getText().toString();
                     if(! checkResponse(responseText, view)){
                         return;
                     }
                     break;
-                case Question.RADIO:
+                case TRUE_FALSE:
                     RadioGroup radioGroup = (RadioGroup) currentView.findViewById(R.id.radio_group_question_response);
                     int selectedRadioButtonId = radioGroup.getCheckedRadioButtonId();
                     RadioButton selectedRadioButton = (RadioButton) radioGroup.findViewById(selectedRadioButtonId);
@@ -241,14 +246,14 @@ public class ListQuestionActivity extends AppCompatActivity {
                     }
                     responseText = selectedRadioButton.getText().toString();
                     break;
-                case Question.SPINNER:
+                case SPINNER:
                     Spinner spinner = (Spinner) currentView.findViewById(R.id.spinner_question_response);
                     responseText = spinner.getSelectedItem().toString();
                     if(! checkResponse(responseText, view)){
                         return;
                     }
                     break;
-                case Question.TRUE_FALSE:
+                case RADIO:
                     RadioGroup radioGroup1 = (RadioGroup) currentView.findViewById(R.id.radio_group_true_false_response);
                     int selectedRadioButtonId1 = radioGroup1.getCheckedRadioButtonId();
                     RadioButton selectedRadioButton1 = (RadioButton) radioGroup1.findViewById(selectedRadioButtonId1);

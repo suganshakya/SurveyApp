@@ -77,18 +77,20 @@ public class QuestionFragment extends DialogFragment {
                     return;
                 }
                 String questionType = spinner.getSelectedItem().toString();
+                Question.Type type = Question.Type.fromString(questionType);
+
                 if(questionType == "" || questionType == null){
                     Toast.makeText(getContext(), "Select Question Type", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 String options = optionsET.getText().toString();
-                if(questionType != "True/False" && (options == "" || options == null)){
+                if(type != type.TRUE_FALSE && (options == "" || options == null)){
                     Toast.makeText(getContext(), "Enter Question Options", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Question question1 = new Question(question, questionType , options, surveyId);
+                Question question1 = new Question(question, type , options, surveyId);
 
                 DataHelper dataHelper = DataHelper.getInstance(getContext());
 
